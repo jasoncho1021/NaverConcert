@@ -4,19 +4,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import kr.or.connect.resv.dto.Promotion;
-import kr.or.connect.resv.service.ResvmanagerService;
+import kr.or.connect.resv.dto.model.Promotion;
 
 @RestController
-@RequestMapping(path="/promotions")
-public class ResvmanagerPromotionApiController {
-	@Autowired
-	ResvmanagerService resvmanagerService;
+@RequestMapping(path="/api/promotions")
+public class ResvmanagerPromotionApiController extends CommonController {
 
 	@GetMapping
 	public Map<String, Object> getPromo() {
