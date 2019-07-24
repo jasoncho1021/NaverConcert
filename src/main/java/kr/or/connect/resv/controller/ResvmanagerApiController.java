@@ -1,9 +1,5 @@
 package kr.or.connect.resv.controller;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import kr.or.connect.resv.dto.DisplayInfoDTO;
 import kr.or.connect.resv.dto.ProductDTO;
-import kr.or.connect.resv.dto.model.Product;
 import kr.or.connect.resv.service.ProductService;
 
 @RestController
@@ -23,29 +18,41 @@ public class ResvmanagerApiController extends CommonController {
 	@Autowired
 	ProductService productService;
 
+	@GetMapping
+	public ProductDTO getAllproducts() {
+		System.out.println("yuumy");
+		return productFromStartAndCategory(-1, 0);
+	}
+
 	@GetMapping(params = "start")
-	public ProductDTO productFromStart(
+	public ProductDTO getProductsByStart(
 			@RequestParam(value = "start", required = true, defaultValue = "0") Integer start) {
-		List<Product> productFromStart = resvmanagerService.getLimitProducts(start);
-		ProductDTO productDTO = new ProductDTO();
-		productDTO.setTotalCount(productFromStart.size());
-		productDTO.setProductLimitList(productFromStart);
-		return productDTO;
+		System.out.println("staart");
+		return productFromStartAndCategory(-1, start);
+	}
+
+	@GetMapping(params = "categoryId")
+	public ProductDTO getProductsByCategoryId(
+			@RequestParam(value = "categoryId", required = true, defaultValue = "0") Integer categoryId) {
+		System.out.println("categorr");
+		return productFromStartAndCategory(categoryId, 0);
+	}
+
+	@GetMapping(params = { "categoryId", "start" })
+	public ProductDTO productFromStartAndCategory(
+			@RequestParam(value = "categoryId", required = false, defaultValue = "1") Integer categoryId,
+			@RequestParam(value = "start", required = false, defaultValue = "0") Integer start) {
+		System.out.println("come!");
+
+		if (categoryId == -1) {
+			return resvmanagerService.getLimitProducts(start);
+		} else {
+			return resvmanagerService.getLimitCategoryProducts(categoryId, start);
+		}
 	}
 
 	@GetMapping("/{displayInfoId}")
 	public DisplayInfoDTO productDetail(@PathVariable Integer displayInfoId) {
 		return productService.getDisplayInfoById(displayInfoId);
-	}
-
-	@GetMapping(params = { "categoryId", "start" })
-	public Map<String, Object> productFromStartAndCategory(
-			@RequestParam(value = "categoryId", required = true) Integer categoryId,
-			@RequestParam(value = "start", required = true, defaultValue = "0") Integer start) {
-		List<Product> productFromStartAndCategory = resvmanagerService.getLimitCategoryProducts(categoryId, start);
-		Map<String, Object> map = new HashMap<>();
-		map.put("productLimitList", productFromStartAndCategory);
-		map.put("totalCount", productFromStartAndCategory.size());
-		return map;
 	}
 }

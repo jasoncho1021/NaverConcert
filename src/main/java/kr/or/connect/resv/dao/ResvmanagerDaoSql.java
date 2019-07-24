@@ -1,24 +1,19 @@
 package kr.or.connect.resv.dao;
 
 public class ResvmanagerDaoSql {
-	public static final String SELECT_ALL_PRODUCTS="select p.id, p.description, p.content, d.place_name " + 
+	/*public static final String SELECT_ALL_PRODUCTS="select p.id, p.description, p.content, d.place_name " + 
 													"from " + 
 													"product p " + 
 													"join " + 
 													"display_info d on p.id = d.product_id " + 
-													"order by p.id";
-	public static final String SELECT_ONE_PRODUCT="select p.id, p.description, p.content, d.place_name " + 
-													"from " + 
-													"product p " + 
-													"join " + 
-													"display_info d on p.id = d.product_id and d.product_id = :productId"; 
-	public static final String SELECT_LIMIT_PRODUCTS="select p.id, p.description, p.content, d.place_name, d.id as display_info_id " + 
+													"order by p.id";*/
+	public static final String SELECT_LIMIT_PRODUCTS="select p.id as product_id, p.description as product_description, p.content as product_content, d.place_name, d.id as display_info_id " + 
 													"from " + 
 													"product p " + 
 													"join " +
 													"display_info d on p.id = d.product_id " + 
 													"order by p.id limit :start, :limit";
-	public static final String SELECT_LIMIT_CATEGORY_PRODUCTS="select p.id, p.description, p.content, d.place_name, d.id as display_info_id " + 
+	public static final String SELECT_LIMIT_CATEGORY_PRODUCTS="select p.id as product_id, p.description as product_description, p.content as product_content, d.place_name, d.id as display_info_id " + 
 															"from " + 
 															"product p " + 
 															"join " + 
@@ -29,13 +24,18 @@ public class ResvmanagerDaoSql {
 												"product_image pi " + 
 												"join " + 
 												"file_info fi " + 
-												"on pi.product_id = :id and pi.type = :imgtype and pi.file_id = fi.id";
+												"on pi.product_id = :productId and pi.type = :imgtype and pi.file_id = fi.id";
 	public static final String SELECT_PRODUCT_IMAGE_FILENAMES="select fi.content_type, fi.create_date, fi.delete_flag, fi.id as file_info_id, fi.file_name, fi.modify_date, pi.product_id, pi.id as product_image_id, fi.save_file_name, pi.type " + 
 															"from " + 
 															"product_image pi " + 
 															"join " + 
 															"file_info fi " + 
 															"on pi.product_id = :id and pi.file_id = fi.id";
+	public static final String SELECT_CATEGORY_COUNT="select count(*) " + 
+													"from " + 
+													"product p " + 
+													"join " + 
+													"display_info di on p.id = di.product_id and p.category_id = :categoryId";
 	public static final String SELECT_CATEGORIES="select c.id, c.name, count(*) as count " + 
 												"from " + 
 												"product p " + 

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import kr.or.connect.resv.dao.ResvmanagerDao;
+import kr.or.connect.resv.dto.ProductDTO;
 import kr.or.connect.resv.dto.model.Category;
 import kr.or.connect.resv.dto.model.Product;
 import kr.or.connect.resv.dto.model.Promotion;
@@ -22,49 +23,51 @@ public class ResvmanagerServiceImpl implements ResvmanagerService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<Product> getLimitProducts(Integer start) {
+	public ProductDTO getLimitProducts(Integer start) {
 		List<Product> productList = resvmanagerDao.selectLimitProducts(start);
 
 		Iterator<Product> productIterator = productList.iterator();
 		while (productIterator.hasNext()) {
 			Product product = productIterator.next();
-			product.setImageUrl(IMAGE_FILE_ROOT_PATH + getFileName(product.getId(), IMAGE_TYPE));
+			product.setProductImageUrl(IMAGE_FILE_ROOT_PATH + getFileName(product.getProductId(), IMAGE_TYPE_PROMO));
 		}
 
-		return productList;
+		ProductDTO productDTO = new ProductDTO();
+		productDTO.setItems(productList);
+		productDTO.setTotalCount(productList.size());
+
+		return productDTO;
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<Product> getLimitCategoryProducts(Integer categoryId, Integer start) {
+	public ProductDTO getLimitCategoryProducts(Integer categoryId, Integer start) {
 		List<Product> productList = resvmanagerDao.selectLimitCategoryProducts(categoryId, start);
 
 		Iterator<Product> productIterator = productList.iterator();
 		while (productIterator.hasNext()) {
 			Product product = productIterator.next();
-			product.setImageUrl(IMAGE_FILE_ROOT_PATH + getFileName(product.getId(), IMAGE_TYPE));
+			product.setProductImageUrl(IMAGE_FILE_ROOT_PATH + getFileName(product.getProductId(), IMAGE_TYPE_PROMO));
 		}
 
-		return productList;
+		ProductDTO productDTO = new ProductDTO();
+		productDTO.setItems(productList);
+		int totalCount = getCategoryCount(categoryId);
+		productDTO.setTotalCount(totalCount);
+
+		return productDTO;
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Integer getCategoryCount(Integer categoryId) {
+		return resvmanagerDao.selectCategoryCount(categoryId);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public String getFileName(Integer id, String type) {
 		return resvmanagerDao.selectFileName(id, type);
-	}
-
-	@Override
-	@Transactional(readOnly = true)
-	public List<Product> getAllProducts() {
-		List<Product> list = resvmanagerDao.selectAllProducts();
-		return list;
-	}
-
-	@Override
-	@Transactional(readOnly = true)
-	public Product getOneProduct(Integer id) {
-		return resvmanagerDao.selectOneProduct(id);
 	}
 
 	@Override

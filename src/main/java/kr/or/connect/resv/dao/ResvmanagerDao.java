@@ -41,14 +41,10 @@ public class ResvmanagerDao {
 		this.jdbc = new NamedParameterJdbcTemplate(dataSource);
 	}
 
-	public List<Product> selectAllProducts() {
-		return jdbc.query(SELECT_ALL_PRODUCTS, productRowMapper);
-	}
-
-	public Product selectOneProduct(Integer id) {
+	public Integer selectCategoryCount(Integer categoryId) {
 		Map<String, Object> param = new HashMap<>();
-		param.put("productId", id);
-		return jdbc.queryForObject(SELECT_ONE_PRODUCT, param, productRowMapper);
+		param.put("categoryId", categoryId);
+		return jdbc.queryForObject(SELECT_CATEGORY_COUNT, param, Integer.class);
 	}
 
 	public List<Product> selectLimitProducts(Integer start) {
@@ -66,9 +62,9 @@ public class ResvmanagerDao {
 		return jdbc.query(SELECT_LIMIT_CATEGORY_PRODUCTS, params, productRowMapper);
 	}
 
-	public String selectFileName(Integer id, String type) {
+	public String selectFileName(Integer productId, String type) {
 		Map<String, Object> params = new HashMap<>();
-		params.put("id", id);
+		params.put("productId", productId);
 		params.put("imgtype", type);
 		return jdbc.queryForObject(SELECT_FILENAME, params, String.class);
 	}
