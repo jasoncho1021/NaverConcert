@@ -13,28 +13,25 @@ import kr.or.connect.resv.service.ProductService;
 
 @RestController
 @RequestMapping(path = "/api/products")
-public class ResvmanagerApiController extends CommonController {
+public class ProductController {
 
 	@Autowired
 	ProductService productService;
 
 	@GetMapping
 	public ProductDTO getAllproducts() {
-		System.out.println("yuumy");
 		return productFromStartAndCategory(-1, 0);
 	}
 
 	@GetMapping(params = "start")
 	public ProductDTO getProductsByStart(
 			@RequestParam(value = "start", required = true, defaultValue = "0") Integer start) {
-		System.out.println("staart");
 		return productFromStartAndCategory(-1, start);
 	}
 
 	@GetMapping(params = "categoryId")
 	public ProductDTO getProductsByCategoryId(
 			@RequestParam(value = "categoryId", required = true, defaultValue = "0") Integer categoryId) {
-		System.out.println("categorr");
 		return productFromStartAndCategory(categoryId, 0);
 	}
 
@@ -42,12 +39,10 @@ public class ResvmanagerApiController extends CommonController {
 	public ProductDTO productFromStartAndCategory(
 			@RequestParam(value = "categoryId", required = false, defaultValue = "1") Integer categoryId,
 			@RequestParam(value = "start", required = false, defaultValue = "0") Integer start) {
-		System.out.println("come!");
-
 		if (categoryId == -1) {
-			return resvmanagerService.getLimitProducts(start);
+			return productService.getLimitProducts(start);
 		} else {
-			return resvmanagerService.getLimitCategoryProducts(categoryId, start);
+			return productService.getLimitCategoryProducts(categoryId, start);
 		}
 	}
 

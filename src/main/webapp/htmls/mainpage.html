@@ -129,7 +129,7 @@
 
 	<script type="rv-template" id="itemList">
         <li class="item">
-            <a href="detail.html?id=${id}" class="item_book">
+            <a href="htmls/detail.html?id=${id}" class="item_book">
                 <div class="item_preview">
 					<img alt="${description}" class="img_thumb" src="${imgUrl}">
                     <span class="img_border"></span>
@@ -142,6 +142,7 @@
         </li>
     </script>
 	<script src="js/mainpageAPI.js"></script>
+	<script src="js/common.js"></script>
 	<script>
 		function changer() {
 			var list = document.querySelectorAll('.visual_img .item');
@@ -152,13 +153,11 @@
 			var currentIndex = 0;
 			var translateXval = [];
 			for (i = 0; i < amount; i++) {
-				var tMatrix = window.getComputedStyle(list[i])
-						.getPropertyValue("transform");
+				var tMatrix = window.getComputedStyle(list[i]).getPropertyValue("transform");
 				var values = tMatrix.split(',');
 
 				translateXval[i] = parseInt(values[4]) - clientWidth; // <- all
-				list[i].style.transform = "translate(" + translateXval[i]
-						+ "px)";
+				list[i].style.transform = "translate(" + translateXval[i] + "px)";
 				list[i].style.transition = "1s";
 
 				if (list[i].classList.contains('currentImg')) {
@@ -172,8 +171,7 @@
 			var nextIndex = (currentIndex - 1 + amount) % amount;
 			if (list[nextIndex].classList.contains('nextImg')) {
 				var goRight = translateXval[nextIndex] + (clientWidth * amount);
-				list[nextIndex].style.transform = "translate(" + goRight
-						+ "px)";
+				list[nextIndex].style.transform = "translate(" + goRight + "px)";
 				list[nextIndex].style.transition = "0s";
 				list[nextIndex].classList.remove('nextImg');
 			}
@@ -181,7 +179,6 @@
 			list[currentIndex].classList.remove('currentImg');
 			list[currentIndex].classList.add('nextImg');
 
-			return list;
 		}
 
 		var requestAnimationFrame = window.requestAnimationFrame
@@ -200,22 +197,6 @@
 			tid = requestAnimationFrame(aniRframe);
 		}
 		tid = requestAnimationFrame(aniRframe);
-
-		function transformReset() {
-			var list = document.querySelectorAll('.visual_img .item');
-			var amount = list.length;
-			for (i = 0; i < amount; i++) {
-				list[i].style.transform = "translate(0px)";
-				list[i].style.transition = "0s";
-				if (list[i].classList.contains('currentImg')) {
-					list[i].classList.remove('currentImg');
-				}
-				if (list[i].classList.contains('nextImg')) {
-					list[i].classList.remove('nextImg');
-				}
-			}
-			list[0].classList.add('currentImg');
-		}
 
 		window.addEventListener("resize", function(event) {
 			if (document.body.clientWidth < 414) {

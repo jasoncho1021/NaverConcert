@@ -1,12 +1,6 @@
 package kr.or.connect.resv.dao;
 
 public class ResvmanagerDaoSql {
-	/*public static final String SELECT_ALL_PRODUCTS="select p.id, p.description, p.content, d.place_name " + 
-													"from " + 
-													"product p " + 
-													"join " + 
-													"display_info d on p.id = d.product_id " + 
-													"order by p.id";*/
 	public static final String SELECT_LIMIT_PRODUCTS="select p.id as product_id, p.description as product_description, p.content as product_content, d.place_name, d.id as display_info_id " + 
 													"from " + 
 													"product p " + 
@@ -30,7 +24,8 @@ public class ResvmanagerDaoSql {
 															"product_image pi " + 
 															"join " + 
 															"file_info fi " + 
-															"on pi.product_id = :id and pi.file_id = fi.id";
+															"on pi.product_id = :id and pi.file_id = fi.id and pi.type in ('ma', 'et') " +
+															"order by pi.type desc";
 	public static final String SELECT_CATEGORY_COUNT="select count(*) " + 
 													"from " + 
 													"product p " + 

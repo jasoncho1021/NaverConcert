@@ -30,7 +30,6 @@ public class WebMvcContextConfiguration extends WebMvcConfigurerAdapter {
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
 		registry.addViewController("/").setViewName("/htmls/mainpage.html");
-		registry.addRedirectViewController("/detail.html", "/htmls/detail.html");
 	}
 
 }

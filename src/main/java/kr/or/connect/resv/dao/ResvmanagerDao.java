@@ -22,7 +22,7 @@ import kr.or.connect.resv.dto.model.Product;
 import kr.or.connect.resv.dto.model.ProductImage;
 import kr.or.connect.resv.dto.model.ProductPrice;
 import kr.or.connect.resv.dto.model.Promotion;
-import kr.or.connect.resv.service.ResvmanagerService;
+import kr.or.connect.resv.service.ProductService;
 
 @Repository
 public class ResvmanagerDao {
@@ -50,7 +50,7 @@ public class ResvmanagerDao {
 	public List<Product> selectLimitProducts(Integer start) {
 		Map<String, Object> params = new HashMap<>();
 		params.put("start", start);
-		params.put("limit", ResvmanagerService.LIMIT);
+		params.put("limit", ProductService.LIMIT);
 		return jdbc.query(SELECT_LIMIT_PRODUCTS, params, productRowMapper);
 	}
 
@@ -58,7 +58,7 @@ public class ResvmanagerDao {
 		Map<String, Object> params = new HashMap<>();
 		params.put("categoryId", categoryId);
 		params.put("start", start);
-		params.put("limit", ResvmanagerService.LIMIT);
+		params.put("limit", ProductService.LIMIT);
 		return jdbc.query(SELECT_LIMIT_CATEGORY_PRODUCTS, params, productRowMapper);
 	}
 

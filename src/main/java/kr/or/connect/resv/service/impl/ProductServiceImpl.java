@@ -11,14 +11,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import kr.or.connect.resv.dao.ResvmanagerDao;
 import kr.or.connect.resv.dto.DisplayInfoDTO;
+import kr.or.connect.resv.dto.ProductDTO;
 import kr.or.connect.resv.dto.model.Comment;
 import kr.or.connect.resv.dto.model.CommentImage;
 import kr.or.connect.resv.dto.model.DisplayInfo;
 import kr.or.connect.resv.dto.model.DisplayInfoImage;
-import kr.or.connect.resv.dto.model.ImageType;
+import kr.or.connect.resv.dto.model.Product;
 import kr.or.connect.resv.dto.model.ProductImage;
 import kr.or.connect.resv.dto.model.ProductPrice;
 import kr.or.connect.resv.service.ProductService;
+import kr.or.connect.resv.utils.Util;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -27,22 +29,69 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	@Transactional(readOnly = true)
+	public ProductDTO getLimitProducts(Integer start) {
+		List<Product> productList = resvmanagerDao.selectLimitProducts(start);
+
+		setProductImageUrl(productList);
+
+		ProductDTO productDTO = new ProductDTO();
+		productDTO.setItems(productList);
+		productDTO.setTotalCount(productList.size());
+
+		return productDTO;
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public ProductDTO getLimitCategoryProducts(Integer categoryId, Integer start) {
+		List<Product> productList = resvmanagerDao.selectLimitCategoryProducts(categoryId, start);
+
+		setProductImageUrl(productList);
+
+		ProductDTO productDTO = new ProductDTO();
+		productDTO.setItems(productList);
+		int totalCount = getCategoryCount(categoryId);
+		productDTO.setTotalCount(totalCount);
+
+		return productDTO;
+	}
+
+	private void setProductImageUrl(List<Product> productList) {
+		Iterator<Product> productIterator = productList.iterator();
+		while (productIterator.hasNext()) {
+			Product product = productIterator.next();
+			product.setProductImageUrl(Util.IMAGE_FILE_ROOT_PATH + getFileName(product.getProductId(), Util.IMAGE_TYPE_PROMO));
+		}
+	}
+
+	@Transactional(readOnly = true)
+	public Integer getCategoryCount(Integer categoryId) {
+		return resvmanagerDao.selectCategoryCount(categoryId);
+	}
+
+	@Transactional(readOnly = true)
+	private String getFileName(Integer id, String type) {
+		return resvmanagerDao.selectFileName(id, type);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
 	public DisplayInfoDTO getDisplayInfoById(Integer displayInfoId) {
 
 		List<Comment> comments = getComments(displayInfoId);
 
-		Map<Integer, Comment> map = new HashMap<>();
+		Map<Integer, Comment> commentMap = new HashMap<>();
 		Iterator<Comment> commentIter = comments.iterator();
 		while (commentIter.hasNext()) {
 			Comment comment = commentIter.next();
-			map.put(comment.getCommentId(), comment);
+			commentMap.put(comment.getCommentId(), comment);
 		}
 
 		List<CommentImage> commentImages = getCommentImages(displayInfoId);
 		Iterator<CommentImage> commentImageIter = commentImages.iterator();
 		while (commentImageIter.hasNext()) {
 			CommentImage commentImage = commentImageIter.next();
-			map.get(commentImage.getReservationUserCommentId()).getCommentImages().add(commentImage);
+			commentMap.get(commentImage.getReservationUserCommentId()).getCommentImages().add(commentImage);
 		}
 
 		DisplayInfo displayInfo = getDisplayInfo(displayInfoId);
@@ -60,26 +109,6 @@ public class ProductServiceImpl implements ProductService {
 		displayInfoDTO.setProductImages(productImages);
 		displayInfoDTO.setProductPrices(productPrices);
 		return displayInfoDTO;
-	}
-
-	private boolean enumExceptionChecker(List<ProductImage> productImageList) {
-		Iterator<ProductImage> productImageIter = productImageList.iterator();
-		while (productImageIter.hasNext()) {
-			ProductImage productImage = productImageIter.next();
-
-			boolean imageTypeValidator = false;
-			for (ImageType imageType : ImageType.values()) {
-				if (imageType.getImageType().equals(productImage.getType())) {
-					imageTypeValidator = true;
-				}
-			}
-
-			if (!imageTypeValidator) {
-				System.out.println("TYPE ENUM EXCEPTION");
-				return false;
-			}
-		}
-		return true;
 	}
 
 	private double getAverageScore(List<Comment> comment) {

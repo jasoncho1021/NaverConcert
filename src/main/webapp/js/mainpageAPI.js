@@ -6,8 +6,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	var bttn = document.querySelector(".more .btn");
 	bttn.addEventListener("click", function(evt) {
 		var tabActive = document.querySelector('.item .active');
-		var categories = tabActive.closest('.item').getAttribute(
-				'data-category');
+		var categories = tabActive.closest('.item').getAttribute('data-category');
 		var start = document.querySelectorAll('.wrap_event_box li').length;
 
 		if (categories == 0) {
@@ -103,18 +102,4 @@ function getCategories(response) {
 	}
 	tabLi[0].setAttribute('category-count', sum);
 	document.querySelector('.pink').innerHTML = sum + "개";
-}
-
-function sendAJAX(url, callback) {
-	var xhttp = new XMLHttpRequest();
-	xhttp.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200) {
-			callback(JSON.parse(this.response));
-		} else if (this.status > 200) {
-			console.log("ajax failure:" + url, this.readyState, this.status);
-		}
-	};
-	xhttp.open("GET", url, true);
-	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-	xhttp.send();
 }
