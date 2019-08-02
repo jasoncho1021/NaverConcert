@@ -116,7 +116,7 @@
 
 
 	<script type="rv-template" id="promotionItem">
-	<li class="${itemclass}" style="background-image: url(${imgUrl}); background-size: 100% 177px;">
+	<li class="item" style="background-image: url(${imgUrl}); background-size: 100% 100%;">
         <a href="#"> <span class="img_btm_border"></span> <span class="img_right_border"></span> <span class="img_bg_gra"></span>
             <div class="event_txt">
                 <h4 class="event_txt_tit"></h4>
@@ -143,8 +143,9 @@
     </script>
 	<script src="js/mainpageAPI.js"></script>
 	<script src="js/common.js"></script>
+	<script src="js/carousel.js"></script>
 	<script>
-		function changer() {
+	/* 	function changer() {
 			var list = document.querySelectorAll('.visual_img .item');
 			var amount = list.length;
 			var clientWidth = list[0].offsetWidth;
@@ -179,31 +180,9 @@
 			list[currentIndex].classList.remove('currentImg');
 			list[currentIndex].classList.add('nextImg');
 
-		}
+		} */
+		
 
-		var requestAnimationFrame = window.requestAnimationFrame
-				|| window.mozRequestAnimationFrame
-				|| window.webkitRequestAnimationFrame
-				|| window.msRequestAnimationFrame;
-
-		var start = 0;
-		var tid = 0;
-		function aniRframe(timestamp) {
-			var progress = timestamp - start;
-			if (progress > 2000) {
-				start = timestamp;
-				changer();
-			}
-			tid = requestAnimationFrame(aniRframe);
-		}
-		tid = requestAnimationFrame(aniRframe);
-
-		window.addEventListener("resize", function(event) {
-			if (document.body.clientWidth < 414) {
-				console.log('resize w:' + window.innerWidth,
-						document.body.clientWidth);
-			}
-		});
 	</script>
 </body>
 

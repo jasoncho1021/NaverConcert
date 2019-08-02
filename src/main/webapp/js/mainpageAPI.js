@@ -82,13 +82,13 @@ function makePromoList(response) {
 	var promoList = response.items;
 	var len = promoList.length;
 
-	resultHTML += html.replace("${itemclass}", "item currentImg")
-					.replace("${imgUrl}", promoList[0].productImageUrl);
-	for (var i = 1; i < len; i++) {
-		resultHTML += html.replace("${itemclass}", "item")
-						.replace("${imgUrl}", promoList[i].productImageUrl);
+	resultHTML += html.replace("${imgUrl}", promoList[len-1].productImageUrl);
+	for (var i = 0; i < len-1; i++) {
+		resultHTML += html.replace("${imgUrl}", promoList[i].productImageUrl);
 	}
 	ul.innerHTML += resultHTML;
+	
+	mainPageCarousel();
 }
 
 function getCategories(response) {
@@ -102,4 +102,25 @@ function getCategories(response) {
 	}
 	tabLi[0].setAttribute('category-count', sum);
 	document.querySelector('.pink').innerHTML = sum + "개";
+}
+
+function mainPageCarousel() {
+	carouselObj.initCarousel(document.querySelectorAll('.visual_img .item'));
+
+	var requestAnimationFrame = window.requestAnimationFrame
+			|| window.mozRequestAnimationFrame
+			|| window.webkitRequestAnimationFrame
+			|| window.msRequestAnimationFrame;
+
+	var start = 0;
+	var tid = 0;
+	function aniRframe(timestamp) {
+		var progress = timestamp - start;
+		if (progress > 2000) {
+			start = timestamp;
+			carouselObj.moveNext();
+		}
+		tid = requestAnimationFrame(aniRframe);
+	}
+	tid = requestAnimationFrame(aniRframe);
 }
