@@ -1,6 +1,6 @@
 package kr.or.connect.resv.dao;
 
-public class ResvmanagerDaoSql {
+public class ReservationManagerDaoSql {
 	public static final String SELECT_LIMIT_PRODUCTS="select p.id as product_id, p.description as product_description, p.content as product_content, d.place_name, d.id as display_info_id " + 
 													"from " + 
 													"product p " + 
@@ -13,7 +13,7 @@ public class ResvmanagerDaoSql {
 															"join " + 
 															"display_info d on p.id = d.product_id and p.category_id = :categoryId " +
 															"order by p.id limit :start, :limit";
-	public static final String SELECT_FILENAME="select fi.file_name " + 
+	public static final String SELECT_FILENAME="select fi.save_file_name " + 
 												"from " + 
 												"product_image pi " + 
 												"join " + 

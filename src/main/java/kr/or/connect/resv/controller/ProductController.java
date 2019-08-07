@@ -16,30 +16,32 @@ import kr.or.connect.resv.service.ProductService;
 public class ProductController {
 
 	@Autowired
-	ProductService productService;
+	private ProductService productService;
+
+	private static final int DEAFAULT_CATEGROY_ID = -1;
 
 	@GetMapping
 	public ProductDTO getAllproducts() {
-		return productFromStartAndCategory(-1, 0);
+		return getProductFromStartAndCategory(DEAFAULT_CATEGROY_ID, 0);
 	}
 
 	@GetMapping(params = "start")
 	public ProductDTO getProductsByStart(
 			@RequestParam(value = "start", required = true, defaultValue = "0") Integer start) {
-		return productFromStartAndCategory(-1, start);
+		return getProductFromStartAndCategory(DEAFAULT_CATEGROY_ID, start);
 	}
 
 	@GetMapping(params = "categoryId")
 	public ProductDTO getProductsByCategoryId(
 			@RequestParam(value = "categoryId", required = true, defaultValue = "0") Integer categoryId) {
-		return productFromStartAndCategory(categoryId, 0);
+		return getProductFromStartAndCategory(categoryId, 0);
 	}
 
 	@GetMapping(params = { "categoryId", "start" })
-	public ProductDTO productFromStartAndCategory(
+	public ProductDTO getProductFromStartAndCategory(
 			@RequestParam(value = "categoryId", required = false, defaultValue = "1") Integer categoryId,
 			@RequestParam(value = "start", required = false, defaultValue = "0") Integer start) {
-		if (categoryId == -1) {
+		if (categoryId == DEAFAULT_CATEGROY_ID) {
 			return productService.getLimitProducts(start);
 		} else {
 			return productService.getLimitCategoryProducts(categoryId, start);

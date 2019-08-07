@@ -1,7 +1,6 @@
 package kr.or.connect.resv.service.impl;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -9,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import kr.or.connect.resv.dao.ResvmanagerDao;
+import kr.or.connect.resv.dao.ReservationManagerDao;
 import kr.or.connect.resv.dto.DisplayInfoDTO;
 import kr.or.connect.resv.dto.ProductDTO;
 import kr.or.connect.resv.dto.model.Comment;
@@ -20,80 +19,58 @@ import kr.or.connect.resv.dto.model.Product;
 import kr.or.connect.resv.dto.model.ProductImage;
 import kr.or.connect.resv.dto.model.ProductPrice;
 import kr.or.connect.resv.service.ProductService;
-import kr.or.connect.resv.utils.Util;
 
 @Service
 public class ProductServiceImpl implements ProductService {
+
 	@Autowired
-	ResvmanagerDao resvmanagerDao;
+	private ReservationManagerDao reservationManagerDao;
 
 	@Override
 	@Transactional(readOnly = true)
 	public ProductDTO getLimitProducts(Integer start) {
-		List<Product> productList = resvmanagerDao.selectLimitProducts(start);
-
-		setProductImageUrl(productList);
-
-		ProductDTO productDTO = new ProductDTO();
-		productDTO.setItems(productList);
+		List<Product> productList = reservationManagerDao.selectLimitProducts(start);
+		ProductDTO productDTO = getProductDTO(productList);
 		productDTO.setTotalCount(productList.size());
-
 		return productDTO;
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public ProductDTO getLimitCategoryProducts(Integer categoryId, Integer start) {
-		List<Product> productList = resvmanagerDao.selectLimitCategoryProducts(categoryId, start);
+		List<Product> productList = reservationManagerDao.selectLimitCategoryProducts(categoryId, start);
+		ProductDTO productDTO = getProductDTO(productList);
+		productDTO.setTotalCount(getCategoryCount(categoryId));
+		return productDTO;
+	}
 
+	private ProductDTO getProductDTO(List<Product> productList) {
 		setProductImageUrl(productList);
-
 		ProductDTO productDTO = new ProductDTO();
 		productDTO.setItems(productList);
-		int totalCount = getCategoryCount(categoryId);
-		productDTO.setTotalCount(totalCount);
-
 		return productDTO;
 	}
 
 	private void setProductImageUrl(List<Product> productList) {
-		Iterator<Product> productIterator = productList.iterator();
-		while (productIterator.hasNext()) {
-			Product product = productIterator.next();
-			product.setProductImageUrl(Util.IMAGE_FILE_ROOT_PATH + getFileName(product.getProductId(), Util.IMAGE_TYPE_PROMO));
+		for (Product product : productList) {
+			product.setProductImageUrl(getFileName(product.getProductId()));
 		}
 	}
 
 	@Transactional(readOnly = true)
 	public Integer getCategoryCount(Integer categoryId) {
-		return resvmanagerDao.selectCategoryCount(categoryId);
+		return reservationManagerDao.selectCategoryCount(categoryId);
 	}
 
 	@Transactional(readOnly = true)
-	private String getFileName(Integer id, String type) {
-		return resvmanagerDao.selectFileName(id, type);
+	private String getFileName(Integer id) {
+		return reservationManagerDao.selectFileName(id);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public DisplayInfoDTO getDisplayInfoById(Integer displayInfoId) {
-
-		List<Comment> comments = getComments(displayInfoId);
-
-		Map<Integer, Comment> commentMap = new HashMap<>();
-		Iterator<Comment> commentIter = comments.iterator();
-		while (commentIter.hasNext()) {
-			Comment comment = commentIter.next();
-			commentMap.put(comment.getCommentId(), comment);
-		}
-
-		List<CommentImage> commentImages = getCommentImages(displayInfoId);
-		Iterator<CommentImage> commentImageIter = commentImages.iterator();
-		while (commentImageIter.hasNext()) {
-			CommentImage commentImage = commentImageIter.next();
-			commentMap.get(commentImage.getReservationUserCommentId()).getCommentImages().add(commentImage);
-		}
-
+		List<Comment> comments = getCommentsByDisplayInfoId(displayInfoId);
 		DisplayInfo displayInfo = getDisplayInfo(displayInfoId);
 		DisplayInfoImage displayInfoImage = getDisplayInfoImage(displayInfoId);
 
@@ -111,43 +88,53 @@ public class ProductServiceImpl implements ProductService {
 		return displayInfoDTO;
 	}
 
-	private double getAverageScore(List<Comment> comment) {
-		Iterator<Comment> commentIter = comment.iterator();
-		double sum = 0;
-		while (commentIter.hasNext()) {
-			sum += commentIter.next().getScore();
+	@Transactional(readOnly = true)
+	private List<Comment> getCommentsByDisplayInfoId(Integer displayInfoId) {
+		Map<Integer, Comment> commentMap = new HashMap<>();
+
+		List<Comment> comments = getComments(displayInfoId);
+		for (Comment comment : comments) {
+			commentMap.put(comment.getCommentId(), comment);
 		}
-		return sum / (comment.size());
+
+		List<CommentImage> commentImages = getCommentImages(displayInfoId);
+		for (CommentImage commentImage : commentImages) {
+			commentMap.get(commentImage.getReservationUserCommentId()).getCommentImages().add(commentImage);
+		}
+		return comments;
+	}
+
+	private double getAverageScore(List<Comment> comments) {
+		return comments.stream().mapToDouble(Comment::getScore).average().orElse(0);
 	}
 
 	@Transactional(readOnly = true)
 	private List<Comment> getComments(Integer displayInfoId) {
-		return resvmanagerDao.selectCommentsByDisplayInfoId(displayInfoId);
+		return reservationManagerDao.selectCommentsByDisplayInfoId(displayInfoId);
 	}
 
 	@Transactional(readOnly = true)
 	private List<CommentImage> getCommentImages(Integer displayInfoId) {
-		return resvmanagerDao.selectCommentImagesByDisplayInfoId(displayInfoId);
+		return reservationManagerDao.selectCommentImagesByDisplayInfoId(displayInfoId);
 	}
 
 	@Transactional(readOnly = true)
 	private DisplayInfo getDisplayInfo(Integer displayInfoId) {
-		return resvmanagerDao.selectDisplayInfoByDisplayInfoId(displayInfoId);
+		return reservationManagerDao.selectDisplayInfoByDisplayInfoId(displayInfoId);
 	}
 
 	@Transactional(readOnly = true)
 	private DisplayInfoImage getDisplayInfoImage(Integer displayInfoId) {
-		return resvmanagerDao.selectDisplayInfoImageByDisplayInfoId(displayInfoId);
+		return reservationManagerDao.selectDisplayInfoImageByDisplayInfoId(displayInfoId);
 	}
 
 	@Transactional(readOnly = true)
 	private List<ProductImage> getProductImages(Integer productId) {
-		return resvmanagerDao.selectProductImageFileNames(productId);
+		return reservationManagerDao.selectProductImageFileNames(productId);
 	}
 
 	@Transactional(readOnly = true)
 	private List<ProductPrice> getProductPrices(Integer productId) {
-		return resvmanagerDao.selectProductPricesByProductId(productId);
+		return reservationManagerDao.selectProductPricesByProductId(productId);
 	}
-
 }

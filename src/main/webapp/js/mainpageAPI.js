@@ -3,8 +3,8 @@ document.addEventListener("DOMContentLoaded", function() {
 	sendAJAX('/api/categories', getCategories);
 	sendAJAX('/api/promotions', makePromoList);
 
-	var bttn = document.querySelector(".more .btn");
-	bttn.addEventListener("click", function(evt) {
+	var moreButton = document.querySelector(".more .btn");
+	moreButton.addEventListener("click", function(evt) {
 		var tabActive = document.querySelector('.item .active');
 		var categories = tabActive.closest('.item').getAttribute('data-category');
 		var start = document.querySelectorAll('.wrap_event_box li').length;
@@ -16,11 +16,11 @@ document.addEventListener("DOMContentLoaded", function() {
 		}
 	});
 
-	var topbutton = document.querySelector('.lnk_top_text');
-	topbutton.addEventListener('click', scroll(0, 0));
+	var topButton = document.querySelector('.lnk_top_text');
+	topButton.addEventListener('click', scroll(0, 0));
 
-	var tabmenu = document.querySelector('.section_event_tab .tab_lst_min');
-	tabmenu.addEventListener('click', function(evt) {
+	var tabMenu = document.querySelector('.section_event_tab .tab_lst_min');
+	tabMenu.addEventListener('click', function(evt) {
 		var el = evt.target.closest('.item');
 		if (el != null) {
 			var tabActive = document.querySelector('.item .active');
@@ -41,8 +41,8 @@ document.addEventListener("DOMContentLoaded", function() {
 				categoryCount.innerHTML = el.querySelector('a').closest('.item').getAttribute('category-count') + "개";
 			}
 		}
-		bttn.setAttribute('loadedCnt', 0);
-		bttn.style.display = 'block';
+		moreButton.setAttribute('loadedCnt', 0);
+		moreButton.style.display = 'block';
 	});
 });
 
@@ -53,14 +53,14 @@ function makeList(response) {
 	var productLimitList = response.items;
 	var len = productLimitList.length;
 
-	var bttn = document.querySelector(".more .btn");
+	var moreButton = document.querySelector(".more .btn");
 	var categoryCnt = document.querySelector('.active').closest('.item').getAttribute('category-count');
-	var loadedCnt = Number(bttn.getAttribute('loadedCnt'));
+	var loadedCnt = Number(moreButton.getAttribute('loadedCnt'));
 	var loadingCnt = loadedCnt + len;
 	if (loadingCnt == categoryCnt) {
-		bttn.style.display = 'none';
+		moreButton.style.display = 'none';
 	}
-	bttn.setAttribute('loadedCnt', loadingCnt);
+	moreButton.setAttribute('loadedCnt', loadingCnt);
 	for (var i = 0; i < len; i++) {
 		resultHTML[i % 2] += html.replace("${id}",
 				productLimitList[i].displayInfoId).replace("${id}",
@@ -87,7 +87,7 @@ function makePromoList(response) {
 		resultHTML += html.replace("${imgUrl}", promoList[i].productImageUrl);
 	}
 	ul.innerHTML += resultHTML;
-	
+
 	mainPageCarousel();
 }
 
@@ -106,21 +106,5 @@ function getCategories(response) {
 
 function mainPageCarousel() {
 	carouselObj.initCarousel(document.querySelectorAll('.visual_img .item'));
-
-	var requestAnimationFrame = window.requestAnimationFrame
-			|| window.mozRequestAnimationFrame
-			|| window.webkitRequestAnimationFrame
-			|| window.msRequestAnimationFrame;
-
-	var start = 0;
-	var tid = 0;
-	function aniRframe(timestamp) {
-		var progress = timestamp - start;
-		if (progress > 2000) {
-			start = timestamp;
-			carouselObj.moveNext();
-		}
-		tid = requestAnimationFrame(aniRframe);
-	}
-	tid = requestAnimationFrame(aniRframe);
+	carouselObj.startAni();
 }

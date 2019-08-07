@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
-	myurl = document.location.href;
-	displayInfoId = myurl.split('=')[1];
-	sendAJAX('/api/products/' + displayInfoId, makeList);
+	currentUrl = document.location.href;
+	displayInfoId = currentUrl.split('=')[1];
+	sendAJAX('/api/products/' + displayInfoId, makePage);
 
 	document.querySelector('.nxt_inn').addEventListener('click', function(evt) {
 		carouselObj.moveNext();
@@ -14,13 +14,13 @@ document.addEventListener("DOMContentLoaded", function() {
 	});
 
 	var openBtn = document.querySelector('._open');
+	var closeBtn = document.querySelector('._close');
 	openBtn.addEventListener('click', function(evt) {
 		openBtn.style.display = 'none';
 		closeBtn.style.display = 'block';
 		document.querySelector('.store_details').classList.remove('close3');
 	});
 
-	var closeBtn = document.querySelector('._close');
 	closeBtn.addEventListener('click', function(evt) {
 		closeBtn.style.display = 'none';
 		openBtn.style.display = 'block';
@@ -52,13 +52,9 @@ document.addEventListener("DOMContentLoaded", function() {
 	});
 });
 
-function makeList(response) {
-	var ul = document.querySelector('.visual_img');
-	var resultHTML = "";
-	var li = document.querySelector('#productImage').innerHTML;
-	var productImages = response.productImages;
+function makePage(response) {
 
-	if (productImages.length < 2) {
+	if (response.productImages.length < 2) {
 		document.querySelector('.prev').style.display = 'none';
 		document.querySelector('.nxt').style.display = 'none';
 	} else {
@@ -66,38 +62,49 @@ function makeList(response) {
 		document.querySelector('.nxt').style.display = 'block';
 	}
 
-	var pageNum = 0;
-	var len = productImages.length;
-	if (len == 1) {
-		resultHTML += li.replace(
-				"${imgUrl}", productImages[0].saveFileName).replace(
-				"${productDescription}",
-				response.displayInfo.productDescription);
-		pageNum = "1";
-	} else if (len > 1) {
-		resultHTML += li.replace("${imgUrl}", productImages[1].saveFileName)
-						.replace("${productDescription}",response.displayInfo.productDescription);
-		resultHTML += li.replace("${imgUrl}", productImages[0].saveFileName)
-						.replace("${productDescription}",response.displayInfo.productDescription);
-		resultHTML += li.replace("${imgUrl}", productImages[1].saveFileName)
-						.replace("${productDescription}",response.displayInfo.productDescription);
-		resultHTML += li.replace("${imgUrl}", productImages[0].saveFileName)
-						.replace("${productDescription}",response.displayInfo.productDescription);
-		pageNum = "2";
-	}
-	ul.innerHTML += resultHTML;
-	document.querySelector('.figure_pagination .off span').innerHTML = pageNum;
+	makeProductImageCarousel(response.productImages, response.displayInfo.productDescription);
 
-	if(len == 1) {
-		ul.querySelector('.item').style.transform = "translate(0px)";
-	} else {
-		carouselObj.initCarousel(document.querySelectorAll('.visual_img .item'));
-		setSpan();
-	}
 	var description = document.querySelector('.store_details .dsc');
 	description.innerHTML = response.displayInfo.productContent;
 
 	makeLocationInfo(response);
+}
+
+function makeProductImageCarousel(productImages, productDescription) {
+	var template = document.querySelector('#productImageHandleBar').innerHTML;
+	var bindTemplate = Handlebars.compile(template);
+	var innerHtml = "";
+	
+	var productImageAdapter = {
+		"imgUrl" : "",
+		"productDescription" : productDescription
+	};
+	
+	var pageNum = 0;
+	var len = productImages.length;
+	if (len == 1) {
+		productImageAdapter.imgUrl = productImages[0].saveFileName
+		innerHtml += bindTemplate(productImageAdapter);
+		pageNum = "1";
+	} else if ( len > 1 ) {
+		productImageAdapter.imgUrl = productImages[1].saveFileName
+		innerHtml += bindTemplate(productImageAdapter);
+		productImageAdapter.imgUrl = productImages[0].saveFileName
+		innerHtml += bindTemplate(productImageAdapter);
+		productImageAdapter.imgUrl = productImages[1].saveFileName
+		innerHtml += bindTemplate(productImageAdapter);
+		productImageAdapter.imgUrl = productImages[0].saveFileName
+		innerHtml += bindTemplate(productImageAdapter);
+		pageNum = "2";
+	}
+
+	document.querySelector('.visual_img').innerHTML = innerHtml;
+	document.querySelector('.figure_pagination .off span').innerHTML = pageNum;
+	
+	if(len > 1) {
+		carouselObj.initCarousel(document.querySelectorAll('.visual_img .item'));
+		setSpan();
+	}
 }
 
 function makeLocationInfo(response) {

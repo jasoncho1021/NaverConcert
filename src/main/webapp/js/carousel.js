@@ -3,12 +3,14 @@ var carouselObj = {
 	productImageListLen : 0,
 	clientWidth : 0,
 	currentTopIndex : 0,
+	aniStart : 0,
+	aniTid : 0,
 
 	initCarousel(productImageList) {
 		this.productImageList = productImageList;
 		this.productImageListLen = this.productImageList.length;
 		this.clientWidth = this.productImageList[0].offsetWidth;
-		
+
 		this.productImageList[0].style.transform = "translate("+ -this.clientWidth + "px)";
 		this.productImageList[1].style.transform = "translate("+ 0 + "px)";
 		for( var i = 2; i < this.productImageListLen; i++) {
@@ -45,5 +47,22 @@ var carouselObj = {
 	setRight(rightItem, second) {
 		rightItem.style.transition = second + "s"; 
 		rightItem.style.transform = "translate("+ this.clientWidth + "px)";
+	},
+
+	aniRframe(timestamp) {
+		var progress = timestamp - this.aniStart;
+		if (progress > 2000) {
+			this.aniStart = timestamp;
+			this.moveNext();
+		}
+		this.aniTid = requestAnimationFrame(this.aniRframe.bind(this));
+	},
+
+	startAni() {
+		requestAnimationFrame = window.requestAnimationFrame
+		|| window.mozRequestAnimationFrame
+		|| window.webkitRequestAnimationFrame
+		|| window.msRequestAnimationFrame;
+		this.aniTid = requestAnimationFrame(this.aniRframe.bind(this));
 	}
 };

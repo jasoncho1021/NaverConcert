@@ -8,8 +8,8 @@
 <meta name="viewport"
 	content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
 <title>네이버 예약</title>
-<link href="css/style.css" rel="stylesheet">
-<link href="css/mycarousel.css" rel="stylesheet">
+<link href="../css/style.css" rel="stylesheet">
+<link href="../css/mycarousel.css" rel="stylesheet">
 </head>
 
 <body>
@@ -116,7 +116,7 @@
 
 
 	<script type="rv-template" id="promotionItem">
-	<li class="item" style="background-image: url(${imgUrl}); background-size: 100% 100%;">
+	<li class="item" style="background-image: url(/${imgUrl}); background-size: 100% 100%;">
         <a href="#"> <span class="img_btm_border"></span> <span class="img_right_border"></span> <span class="img_bg_gra"></span>
             <div class="event_txt">
                 <h4 class="event_txt_tit"></h4>
@@ -129,9 +129,9 @@
 
 	<script type="rv-template" id="itemList">
         <li class="item">
-            <a href="htmls/detail.html?id=${id}" class="item_book">
+            <a href="/htmls/detail.html?id=${id}" class="item_book">
                 <div class="item_preview">
-					<img alt="${description}" class="img_thumb" src="${imgUrl}">
+					<img alt="${description}" class="img_thumb" src="/${imgUrl}">
                     <span class="img_border"></span>
                 </div>
                 <div class="event_txt">
@@ -141,49 +141,9 @@
             </a>
         </li>
     </script>
-	<script src="js/mainpageAPI.js"></script>
-	<script src="js/common.js"></script>
-	<script src="js/carousel.js"></script>
-	<script>
-	/* 	function changer() {
-			var list = document.querySelectorAll('.visual_img .item');
-			var amount = list.length;
-			var clientWidth = list[0].offsetWidth;
-
-			var i;
-			var currentIndex = 0;
-			var translateXval = [];
-			for (i = 0; i < amount; i++) {
-				var tMatrix = window.getComputedStyle(list[i]).getPropertyValue("transform");
-				var values = tMatrix.split(',');
-
-				translateXval[i] = parseInt(values[4]) - clientWidth; // <- all
-				list[i].style.transform = "translate(" + translateXval[i] + "px)";
-				list[i].style.transition = "1s";
-
-				if (list[i].classList.contains('currentImg')) {
-					currentIndex = i;
-				}
-			}
-
-			var prevIndex = (currentIndex + 1) % amount;
-			list[prevIndex].classList.add('currentImg');
-
-			var nextIndex = (currentIndex - 1 + amount) % amount;
-			if (list[nextIndex].classList.contains('nextImg')) {
-				var goRight = translateXval[nextIndex] + (clientWidth * amount);
-				list[nextIndex].style.transform = "translate(" + goRight + "px)";
-				list[nextIndex].style.transition = "0s";
-				list[nextIndex].classList.remove('nextImg');
-			}
-
-			list[currentIndex].classList.remove('currentImg');
-			list[currentIndex].classList.add('nextImg');
-
-		} */
-		
-
-	</script>
+	<script src="/js/mainpageAPI.js"></script>
+	<script src="/js/comment.js"></script>
+	<script src="/js/carousel.js"></script>
 </body>
 
 </html>

@@ -1,6 +1,6 @@
 package kr.or.connect.resv.dao;
 
-import static kr.or.connect.resv.dao.ResvmanagerDaoSql.*;
+import static kr.or.connect.resv.dao.ReservationManagerDaoSql.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +25,9 @@ import kr.or.connect.resv.dto.model.Promotion;
 import kr.or.connect.resv.service.ProductService;
 
 @Repository
-public class ResvmanagerDao {
+public class ReservationManagerDao {
+	public static final String IMAGE_TYPE = "th";
+
 	private NamedParameterJdbcTemplate jdbc;
 	private RowMapper<Product> productRowMapper = BeanPropertyRowMapper.newInstance(Product.class);
 	private RowMapper<ProductImage> productImageRowMapper = BeanPropertyRowMapper.newInstance(ProductImage.class);
@@ -37,7 +39,7 @@ public class ResvmanagerDao {
 	private RowMapper<DisplayInfoImage> displayInfoImageRowMapper = BeanPropertyRowMapper.newInstance(DisplayInfoImage.class);
 	private RowMapper<ProductPrice> productPriceRowMapper = BeanPropertyRowMapper.newInstance(ProductPrice.class);
 
-	public ResvmanagerDao(DataSource dataSource) {
+	public ReservationManagerDao(DataSource dataSource) {
 		this.jdbc = new NamedParameterJdbcTemplate(dataSource);
 	}
 
@@ -62,10 +64,10 @@ public class ResvmanagerDao {
 		return jdbc.query(SELECT_LIMIT_CATEGORY_PRODUCTS, params, productRowMapper);
 	}
 
-	public String selectFileName(Integer productId, String type) {
+	public String selectFileName(Integer productId) {
 		Map<String, Object> params = new HashMap<>();
 		params.put("productId", productId);
-		params.put("imgtype", type);
+		params.put("imgtype", IMAGE_TYPE);
 		return jdbc.queryForObject(SELECT_FILENAME, params, String.class);
 	}
 
