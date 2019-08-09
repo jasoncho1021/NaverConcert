@@ -10,9 +10,13 @@ import javax.sql.DataSource;
 
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import kr.or.connect.resv.dto.ReservationResponse;
 import kr.or.connect.resv.dto.model.Category;
 import kr.or.connect.resv.dto.model.Comment;
 import kr.or.connect.resv.dto.model.CommentImage;
@@ -22,6 +26,9 @@ import kr.or.connect.resv.dto.model.Product;
 import kr.or.connect.resv.dto.model.ProductImage;
 import kr.or.connect.resv.dto.model.ProductPrice;
 import kr.or.connect.resv.dto.model.Promotion;
+import kr.or.connect.resv.dto.model.ReservationInfo;
+import kr.or.connect.resv.dto.model.ReservationParam;
+import kr.or.connect.resv.dto.model.ReservationPrice;
 import kr.or.connect.resv.service.ProductService;
 
 @Repository
@@ -38,9 +45,18 @@ public class ReservationManagerDao {
 	private RowMapper<DisplayInfo> displayInfoRowMapper = BeanPropertyRowMapper.newInstance(DisplayInfo.class);
 	private RowMapper<DisplayInfoImage> displayInfoImageRowMapper = BeanPropertyRowMapper.newInstance(DisplayInfoImage.class);
 	private RowMapper<ProductPrice> productPriceRowMapper = BeanPropertyRowMapper.newInstance(ProductPrice.class);
+	private RowMapper<ReservationInfo> reservationInfoRowMapper = BeanPropertyRowMapper.newInstance(ReservationInfo.class);
+	private RowMapper<ReservationPrice> reservationPriceRowMapper = BeanPropertyRowMapper.newInstance(ReservationPrice.class);
+	private RowMapper<ReservationResponse> reservationResponseRowMapper = BeanPropertyRowMapper.newInstance(ReservationResponse.class);
+	private SimpleJdbcInsert insertReservationInfo;
+	private SimpleJdbcInsert insertReservationInfoPrice;
 
 	public ReservationManagerDao(DataSource dataSource) {
 		this.jdbc = new NamedParameterJdbcTemplate(dataSource);
+		this.insertReservationInfo = new SimpleJdbcInsert(dataSource).withTableName("reservation_info")
+				.usingGeneratedKeyColumns("id");
+		this.insertReservationInfoPrice = new SimpleJdbcInsert(dataSource).withTableName("reservation_info_price")
+				.usingGeneratedKeyColumns("id");
 	}
 
 	public Integer selectCategoryCount(Integer categoryId) {
@@ -108,10 +124,51 @@ public class ReservationManagerDao {
 		param.put("displayInfoId", id);
 		return jdbc.queryForObject(SELECT_DISPLAY_INFO_IMAGE_BY_DISPLAY_INFO_ID, param, displayInfoImageRowMapper);
 	}
-	
+
 	public List<ProductPrice> selectProductPricesByProductId(Integer id) {
 		Map<String, Object> param = new HashMap<>();
 		param.put("productId", id);
 		return jdbc.query(SELECT_PRODUCT_PRICES, param, productPriceRowMapper);
+	}
+
+	public Integer insertReservationInfo(ReservationParam reservationParam) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("display_info_id", reservationParam.getDisplayInfoId());
+		params.put("product_id", reservationParam.getProductId());
+		params.put("reservation_date", reservationParam.getReservationYearMonthDay());
+		params.put("reservation_email", reservationParam.getReservationEmail());
+		params.put("reservation_name", reservationParam.getReservationName());
+		params.put("reservation_tel", reservationParam.getReservationTelephone());
+		params.put("cancel_flag", 0);
+		return insertReservationInfo.executeAndReturnKey(params).intValue();
+	}
+
+	public Integer insertReservationInfoPrice(ReservationPrice reservationPrice) {
+		SqlParameterSource params = new BeanPropertySqlParameterSource(reservationPrice);
+		return insertReservationInfoPrice.executeAndReturnKey(params).intValue();
+	}
+
+	public List<ReservationInfo> selectReservationInfoByReservationEmail(String reservationEmail) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("reservationEmail", reservationEmail);
+		return jdbc.query(SELECT_RESERVATION_INFO_BY_RESERVATION_EMAIL, param, reservationInfoRowMapper);
+	}
+
+	public Integer selectTotalPriceByReservationInfoId(Integer reservationInfoId) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("reservationInfoId", reservationInfoId);
+		return jdbc.queryForObject(SELECT_TOTAL_PRICE_BY_RESERVATION_INFO_ID, param, Integer.class);
+	}
+	
+	public ReservationResponse selectReservationResponseById(Integer reservationInfoId) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("reservationInfoId", reservationInfoId);
+		return jdbc.queryForObject(SELECT_RESERVATION_RESPONSE_BY_RESERVATION_INFO_ID, param, reservationResponseRowMapper);
+	}
+	
+	public List<ReservationPrice> selectReservationPricesById(Integer reservationInfoId) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("reservationInfoId", reservationInfoId);
+		return jdbc.query(SELECT_RESERVATION_PRICE_BY_RESERVATION_INFO_ID, param, reservationPriceRowMapper);
 	}
 }
