@@ -1,4 +1,7 @@
-<!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="ko">
 
 <head>
@@ -8,8 +11,8 @@
 <meta name="viewport"
 	content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
 <title>네이버 예약</title>
-<link href="../css/style.css" rel="stylesheet">
-<link href="../css/mycarousel.css" rel="stylesheet">
+<link href="/css/style.css" rel="stylesheet">
+<link href="/css/mycarousel.css" rel="stylesheet">
 </head>
 
 <body>
@@ -23,9 +26,17 @@
 						class="spr_bi ico_bk_logo">예약</span>
 					</a>
 				</h1>
-				<a href="./bookinglogin.html" class="btn_my"> <span
-					class="viewReservation" title="예약확인">예약확인</span>
-				</a>
+				<c:set var="data" value="개발자" />
+ 
+<c:choose>
+    <c:when test = "${not empty reservationEmail}">
+		<a href="myreservation" class="btn_my"> <span class="viewReservation" title="${reservationEmail}">${reservationEmail}</span></a>
+    </c:when>
+    <c:when test = "${empty reservationEmail}">
+        <a href="login" class="btn_my"> <span class="viewReservation" title="예약확인">예약확인</span></a>
+    </c:when>
+</c:choose>
+				<input type="hidden" id="reservationEmail" name="reservationEmail" value="${reservationEmail}">
 			</header>
 		</div>
 		<hr>
@@ -116,7 +127,7 @@
 
 
 	<script type="rv-template" id="promotionItem">
-	<li class="item" style="background-image: url(/${imgUrl}); background-size: 100% 100%;">
+	<li class="item" style="background-image: url(/{{imgUrl}}); background-size: 100% 100%;">
         <a href="#"> <span class="img_btm_border"></span> <span class="img_right_border"></span> <span class="img_bg_gra"></span>
             <div class="event_txt">
                 <h4 class="event_txt_tit"></h4>
@@ -129,14 +140,14 @@
 
 	<script type="rv-template" id="itemList">
         <li class="item">
-            <a href="/htmls/detail.html?id=${id}" class="item_book">
+            <a href="detail?id={{id}}" class="item_book">
                 <div class="item_preview">
-					<img alt="${description}" class="img_thumb" src="/${imgUrl}">
+					<img alt="{{description}}" class="img_thumb" src="/{{imgUrl}}">
                     <span class="img_border"></span>
                 </div>
                 <div class="event_txt">
-                    <h4 class="event_txt_tit"> <span>${description}</span> <small class="sm">${placename}</small> </h4>
-                    <p class="event_txt_dsc">${content}</p>
+                    <h4 class="event_txt_tit"> <span>{{description}}</span> <small class="sm">{{placename}}</small> </h4>
+                    <p class="event_txt_dsc">{{content}}</p>
                 </div>
             </a>
         </li>

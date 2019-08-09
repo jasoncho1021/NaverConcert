@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="ko">
 
 <head>
@@ -6,7 +8,7 @@
     <meta name="description" content="네이버 예약, 네이버 예약이 연동된 곳 어디서나 바로 예약하고, 네이버 예약 홈(나의예약)에서 모두 관리할 수 있습니다.">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
     <title>네이버 예약</title>
-    <link href="../css/style.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
 </head>
 <body>
     <div id="container">
@@ -24,7 +26,7 @@
             <div class="wrap_review_list">
                 <div class="review_header">
                     <div class="top_title gr">
-                        <a href="./detail.html" class="btn_back" title="이전 화면으로 이동"> <i class="fn fn-backward1"></i> </a>
+                        <a href="/detail" class="btn_back" title="이전 화면으로 이동"> <i class="fn fn-backward1"></i> </a>
                         <h2><a class="title" href="#">오디컴퍼니 주식회사</a></h2>
                     </div>
                 </div>
@@ -79,7 +81,7 @@
 		</li>
 	</script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
-	<script src="../js/comment.js"></script>
+	<script src="/js/comment.js"></script>
 	<script>
 	document.addEventListener("DOMContentLoaded", function() {
 		myurl = document.location.href; 

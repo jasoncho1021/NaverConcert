@@ -62,14 +62,13 @@ function makeList(response) {
 	}
 	moreButton.setAttribute('loadedCnt', loadingCnt);
 	for (var i = 0; i < len; i++) {
-		resultHTML[i % 2] += html.replace("${id}",
-				productLimitList[i].displayInfoId).replace("${id}",
-				productLimitList[i].productId).replace("${description}",
-				productLimitList[i].productDescription).replace("${imgUrl}",
-				productLimitList[i].productImageUrl).replace("${description}",
-				productLimitList[i].productDescription).replace("${placename}",
-				productLimitList[i].placeName).replace("${content}",
-				productLimitList[i].productContent);
+		resultHTML[i % 2] += html.replace("{{id}}",productLimitList[i].displayInfoId)
+								.replace("{{id}}}", productLimitList[i].productId)
+								.replace("{{description}}", productLimitList[i].productDescription)
+								.replace("{{imgUrl}}", productLimitList[i].productImageUrl)
+								.replace("{{description}}", productLimitList[i].productDescription)
+								.replace("{{placename}}", productLimitList[i].placeName)
+								.replace("{{content}}", productLimitList[i].productContent);
 	}
 	ul[0].innerHTML += resultHTML[0];
 	ul[1].innerHTML += resultHTML[1];
@@ -82,9 +81,9 @@ function makePromoList(response) {
 	var promoList = response.items;
 	var len = promoList.length;
 
-	resultHTML += html.replace("${imgUrl}", promoList[len-1].productImageUrl);
+	resultHTML += html.replace("{{imgUrl}}", promoList[len-1].productImageUrl);
 	for (var i = 0; i < len-1; i++) {
-		resultHTML += html.replace("${imgUrl}", promoList[i].productImageUrl);
+		resultHTML += html.replace("{{imgUrl}}", promoList[i].productImageUrl);
 	}
 	ul.innerHTML += resultHTML;
 
