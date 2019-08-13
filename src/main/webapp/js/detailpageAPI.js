@@ -3,6 +3,8 @@ document.addEventListener("DOMContentLoaded", function() {
 	displayInfoId = currentUrl.split('=')[1];
 	sendAJAX('/api/products/' + displayInfoId, makePage);
 
+	document.querySelector('.section_btn > a').href += displayInfoId;
+
 	document.querySelector('.nxt_inn').addEventListener('click', function(evt) {
 		carouselObj.moveNext();
 		setSpan();

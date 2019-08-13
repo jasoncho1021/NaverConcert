@@ -50,15 +50,12 @@ public class ReservationManagerDaoTest {
 		param.setReservationEmail("huni@naver.com");
 		param.setReservationName("조재");
 		param.setReservationTelephone("0100-3333-2222");
-		
+
 		String dateTime = "2019-04-16T15:00";
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 		param.setReservationYearMonthDay(LocalDateTime.parse(dateTime, formatter));
-
+		System.out.println(LocalDateTime.parse(dateTime, formatter));
 		// when
-		/*
-		 * insert
-		 */
 		int reservationInfoId = dao.insertReservationInfo(param);
 
 		for (ReservationPrice reservationPrice : param.getPrices()) {
@@ -67,18 +64,13 @@ public class ReservationManagerDaoTest {
 			reservationPrice.setReservationInfoPriceId(reservationInfoPriceId);
 		}
 
-		/*
-		 * response
-		 */
 		ReservationResponse reservationResponse = dao.selectReservationResponseById(reservationInfoId);
 		List<ReservationPrice> reservationPrices = dao.selectReservationPricesById(reservationInfoId);
 
 		reservationResponse.setPrices(reservationPrices);
-
-		System.out.println(reservationResponse);
-
 		// then
 		// assertThat(param, is(16));
+		System.out.println(reservationResponse);
 		reservationInfoByEmail(param.getReservationEmail());
 	}
 

@@ -135,7 +135,9 @@ public class ReservationManagerDao {
 		Map<String, Object> params = new HashMap<>();
 		params.put("display_info_id", reservationParam.getDisplayInfoId());
 		params.put("product_id", reservationParam.getProductId());
+		params.put("create_date", reservationParam.getReservationYearMonthDay());
 		params.put("reservation_date", reservationParam.getReservationYearMonthDay());
+		params.put("modify_date", reservationParam.getReservationYearMonthDay());
 		params.put("reservation_email", reservationParam.getReservationEmail());
 		params.put("reservation_name", reservationParam.getReservationName());
 		params.put("reservation_tel", reservationParam.getReservationTelephone());
@@ -170,5 +172,11 @@ public class ReservationManagerDao {
 		Map<String, Object> param = new HashMap<>();
 		param.put("reservationInfoId", reservationInfoId);
 		return jdbc.query(SELECT_RESERVATION_PRICE_BY_RESERVATION_INFO_ID, param, reservationPriceRowMapper);
+	} 
+	
+	public Integer cancelReservationInfo(Integer reservationInfoId) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("reservationInfoId", reservationInfoId);
+		return jdbc.update(UPDATE_RESERVAION_INFO_CANCEL, param);
 	}
 }

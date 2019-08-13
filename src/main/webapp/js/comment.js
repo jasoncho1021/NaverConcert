@@ -12,6 +12,20 @@ function sendAJAX(url, callback) {
 	xhttp.send();
 }
 
+function makeComments(response, lenLimit) {
+	if(response.comments.length < 1) {
+		return;
+	}
+	var score = response.averageScore.toFixed(1);
+	var percentage = score * 100 / 5.0;
+	var gradeArea = document.querySelector('.grade_area');
+	gradeArea.querySelector('.graph_value').style.width = percentage + "%"; 
+	gradeArea.querySelector('.text_value span').innerHTML = score; 
+	gradeArea.querySelector('.green').innerHTML = response.comments.length + "건";
+
+	makeCommentsByHandleBar(response.comments, lenLimit);
+}
+
 function makeCommentsByHandleBar(comments, lenLimit) {
 	var template = document.querySelector('#reservationCommentHandleBar').innerHTML;
 	var bindTemplate = Handlebars.compile(template);
@@ -42,18 +56,4 @@ function makeCommentsByHandleBar(comments, lenLimit) {
 	});
 
 	document.querySelector('.list_short_review').innerHTML = innerHtml;
-}
-
-function makeComments(response, lenLimit) {
-	if(response.comments.length < 1) {
-		return;
-	}
-	var score = response.averageScore.toFixed(1);
-	var percentage = score * 100 / 5.0;
-	var gradeArea = document.querySelector('.grade_area');
-	gradeArea.querySelector('.graph_value').style.width = percentage + "%"; 
-	gradeArea.querySelector('.text_value span').innerHTML = score; 
-	gradeArea.querySelector('.green').innerHTML = response.comments.length + "건";
-
-	makeCommentsByHandleBar(response.comments, lenLimit);
 }

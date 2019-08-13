@@ -26,7 +26,7 @@
             <div class="wrap_review_list">
                 <div class="review_header">
                     <div class="top_title gr">
-                        <a href="/detail" class="btn_back" title="이전 화면으로 이동"> <i class="fn fn-backward1"></i> </a>
+                        <a onclick="(function(){history.back();})()" class="btn_back" title="이전 화면으로 이동"> <i class="fn fn-backward1"></i> </a>
                         <h2><a class="title" href="#">오디컴퍼니 주식회사</a></h2>
                     </div>
                 </div>
@@ -87,12 +87,6 @@
 		myurl = document.location.href; 
 		displayInfoId = myurl.split('=')[1];
 		sendAJAX('/api/products/' + displayInfoId, makeAllComments);
-		
-		var backBtn = document.querySelector('.btn_back');
-		backBtn.addEventListener('click', function(evt) {
-			var html = backBtn.getAttribute('href');
-			backBtn.setAttribute('href', html + "?id=" + displayInfoId);
-		});
 	});
 
 	function makeAllComments(response) {

@@ -46,21 +46,23 @@ public class ReservationServiceImpl implements ReservationService {
 
 		for (ReservationPrice reservationPrice : reservationParam.getPrices()) {
 			reservationPrice.setReservationInfoId(reservationInfoId);
-			int reservationInfoPriceId = reservationManagerDao.insertReservationInfoPrice(reservationPrice);
-			//reservationPrice.setReservationInfoPriceId(reservationInfoPriceId);
+			reservationManagerDao.insertReservationInfoPrice(reservationPrice);
 		}
+		return makeReservationResponse(reservationInfoId);
+	}
 
+	@Transactional
+	private ReservationResponse makeReservationResponse(Integer reservationInfoId) {
 		ReservationResponse reservationResponse = reservationManagerDao.selectReservationResponseById(reservationInfoId);
 		List<ReservationPrice> reservationPrices = reservationManagerDao.selectReservationPricesById(reservationInfoId);
-
 		reservationResponse.setPrices(reservationPrices);
 		return reservationResponse;
 	}
 
 	@Override
 	@Transactional
-	public ReservationResponse cancelReservation(Integer reservationId) {
-		// TODO Auto-generated method stub
-		return null;
+	public ReservationResponse cancelReservation(Integer reservationInfoId) {
+		reservationManagerDao.cancelReservationInfo(reservationInfoId);
+		return makeReservationResponse(reservationInfoId);
 	}
 }

@@ -40,7 +40,7 @@
                         
                         <c:choose>
     <c:when test = "${not empty reservationEmail}">
-		 <a href="myreservation" class="btn_my"> <span class="viewReservation" title="${reservationEmail}">${reservationEmail}</span> </a>
+		 <a href="login" class="btn_my"> <span class="viewReservation" title="${reservationEmail}">${reservationEmail}</span> </a>
     </c:when>
     <c:when test = "${empty reservationEmail}">
          <a href="login" class="btn_my"> <span class="viewReservation" title="예약확인">예약확인</span> </a>
@@ -109,7 +109,7 @@
                     </div>
                 </div>
                 <div class="section_btn"> 
-                	<a href="reserve">
+                	<a href="reserve?id=">
                 	<button type="button" class="bk_btn"> 
                 	<i class="fn fn-nbooking-calender2"></i>
                 	<span>예매하기</span>

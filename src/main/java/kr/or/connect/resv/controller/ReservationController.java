@@ -29,7 +29,8 @@ public class ReservationController {
 	public LocalDateTime getReservationDate() {
 		Random random = new Random();
 		int randomScope = random.nextInt(5);
-		return LocalDateTime.now().plusDays(randomScope);
+		LocalDateTime reservationDate = LocalDateTime.now().plusDays(randomScope);
+		return reservationDate;
 	}
 
 	@GetMapping(params = "reservationEmail")
@@ -41,9 +42,7 @@ public class ReservationController {
 
 	@PostMapping
 	public ReservationResponse makeReservation(@RequestBody ReservationParam reservationParam) {
-		System.out.println(reservationParam);
-		// return reservationService.makeReservation(reservationParam);
-		return null;
+		return reservationService.makeReservation(reservationParam);
 	}
 
 	@PutMapping("/{reservationId}")

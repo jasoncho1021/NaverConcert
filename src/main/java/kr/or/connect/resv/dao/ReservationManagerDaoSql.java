@@ -107,4 +107,5 @@ public class ReservationManagerDaoSql {
 																					"reservation_info_price " + 
 																					"where " + 
 																					"reservation_info_id = :reservationInfoId";
+	public static final String UPDATE_RESERVAION_INFO_CANCEL="update reservation_info set cancel_flag = 1, modify_date = now() where id = :reservationInfoId";
 }
