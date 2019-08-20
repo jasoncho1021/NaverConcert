@@ -5,14 +5,17 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
@@ -22,10 +25,14 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
+import kr.or.connect.resv.interceptor.EmailInterceptor;
+
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = { "kr.or.connect.resv.controller" })
+@ComponentScan(basePackages = { "kr.or.connect.resv.controller", "kr.or.connect.resv.interceptor" })
 public class WebMvcContextConfiguration extends WebMvcConfigurerAdapter {
+	@Autowired
+	private EmailInterceptor emailInterceptor;
 
 	@Override
 	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
@@ -62,5 +69,18 @@ public class WebMvcContextConfiguration extends WebMvcConfigurerAdapter {
 				.featuresToEnable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
 				.serializerByType(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
 				.serializerByType(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ISO_DATE));
+	}
+
+	@Override
+	public void addInterceptors(InterceptorRegistry interceptorRegistry) {
+		interceptorRegistry.addInterceptor(emailInterceptor).addPathPatterns("/mainpage").addPathPatterns("/detail")
+				.addPathPatterns("/login");
+	}
+
+	@Bean
+	public MultipartResolver multipartResolver() {
+		org.springframework.web.multipart.commons.CommonsMultipartResolver multipartResolver = new org.springframework.web.multipart.commons.CommonsMultipartResolver();
+		multipartResolver.setMaxUploadSize(10485760); // 1024 * 1024 * 10
+		return multipartResolver;
 	}
 }

@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <!-- saved from url=(0042)https://m.booking.naver.com/booked/confirm -->
 <html lang="ko" class="no-js" >
    <head>
@@ -104,6 +104,24 @@
          </translater-modal>
       </app>
 
+	<script>
+	document.addEventListener("DOMContentLoaded", function() {
+	var btn = document.querySelector(".login_btn");
+	var result = document.querySelector(".result");
+
+	btn.addEventListener("click", function(evt) {
+	    evt.preventDefault();
+	    var emailValue = document.querySelector("[name='reservationEmail']").value;
+	    var regExp = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;
+	    var bValid = (regExp).test(emailValue);
+	    if(!bValid)  { 
+		      alert("올바르지 않은 이메일입니다");
+	    } else {
+    		document.querySelector("#form1").submit();
+	    }
+	});
+	});
+	</script>
        
    </body>
 </html>

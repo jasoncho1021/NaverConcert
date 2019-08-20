@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 	<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html lang="ko">
 
 <head>
@@ -65,7 +65,7 @@
                             </div>
                             <div class="prev">
                                 <div class="prev_inn">
-                                    <a href="#" class="btn_prev" title="이전">
+                                    <a class="btn_prev" title="이전">
                                         <!-- [D] 첫 이미지 이면 off 클래스 추가 -->
                                         <i class="spr_book2 ico_arr6_lt off"></i>
                                     </a>
@@ -73,7 +73,7 @@
                             </div>
                             <div class="nxt">
                                 <div class="nxt_inn">
-                                    <a href="#" class="btn_nxt" title="다음">
+                                    <a class="btn_nxt" title="다음">
                                         <i class="spr_book2 ico_arr6_rt"></i>
                                     </a>
                                 </div>
@@ -156,12 +156,12 @@
                                     </li>
                                     <li class="detail_info_lst"> <strong class="in_tit">[공지사항]</strong>
                                         <ul class="in_img_group">
-                                            <li class="in_img_lst"> <img alt="" class="img_thumb" src="https://ssl.phinf.net/naverbooking/20170131_238/14858250829398Pnx6_JPEG/%B0%F8%C1%F6%BB%E7%C7%D7.jpg?type=a1000"> </li>
+                                            <li class="in_img_lst"> <img alt="공지사항이미지" class="img_thumb" src="https://ssl.phinf.net/naverbooking/20170131_238/14858250829398Pnx6_JPEG/%B0%F8%C1%F6%BB%E7%C7%D7.jpg?type=a1000"> </li>
                                         </ul>
                                     </li>
                                     <!-- <li class="detail_info_lst"> <strong class="in_tit">[공연정보]</strong>
                                         <ul class="in_img_group">
-                                            <li class="in_img_lst"> <img alt="" class="img_thumb" src="https://ssl.phinf.net/naverbooking/20170131_255/1485825099482NmYMe_JPEG/%B0%F8%BF%AC%C1%A4%BA%B8.jpg?type=a1000"> </li>
+                                            <li class="in_img_lst"> <img alt="공연정보이미지" class="img_thumb" src="https://ssl.phinf.net/naverbooking/20170131_255/1485825099482NmYMe_JPEG/%B0%F8%BF%AC%C1%A4%BA%B8.jpg?type=a1000"> </li>
                                         </ul>
                                     </li> -->
                                 </ul>
@@ -222,7 +222,7 @@
     <div id="photoviwer"></div>
 	<script type="rv-template" id="productImageHandleBar">
 		<li class="item" style="width: 414px;"> 
-			<img alt="" class="img_thumb" src="/{{imgUrl}}"> 
+			<img alt="제품이미지" class="img_thumb" src="/{{imgUrl}}"> 
 				<span class="img_bg"></span>
 				<div class="visual_txt">
 					<div class="visual_txt_inn">

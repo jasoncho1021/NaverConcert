@@ -1,17 +1,21 @@
 document.addEventListener("DOMContentLoaded", function() {
 	currentUrl = document.location.href;
 	displayInfoId = currentUrl.split('=')[1];
-	getAJAX('/api/reservations', setTime); // 서버시간 요청
-	getAJAX('/api/products/' + displayInfoId, renderPage);
+	requestAjax.getData('/api/reservations', setTime); // 서버시간 요청
+	requestAjax.getData('/api/products/' + displayInfoId, renderPage);
 
-	document.querySelector('.chk_txt_label').addEventListener('click', function(evt) {
-		if(!document.querySelector('#chk3').checked) {
-			document.querySelector('.bk_btn_wrap').classList.remove('disable');
-		} else {
-			document.querySelector('.bk_btn_wrap').classList.add('disable');
-		}
+	initAgreementCheckListener();
+	initReservationConfirmBtnListener();
+	initToggleListener();
+});
+
+function initAgreementCheckListener() {
+	document.querySelector('#chk3').addEventListener( 'change', function() {
+		enableSendButtonIfAllInputsAreValid();
 	});
-	
+}
+
+function initReservationConfirmBtnListener() {
 	document.querySelector('.bk_btn_wrap').addEventListener('click', function(evt) {
 		if (this.classList.contains('disable')) {
 			return;
@@ -19,19 +23,55 @@ document.addEventListener("DOMContentLoaded", function() {
 			makeData();
 		}
 	});
-	
-});
+}
+
+function initToggleListener() {
+	document.querySelector('.section_booking_agreement').addEventListener('click', function(evt) {
+		if(evt.target.classList.contains('btn_text')) {
+			if(!evt.target.closest('.agreement').classList.contains('open')) {
+				evt.target.closest('.agreement').classList.add('open');
+			} else {
+				evt.target.closest('.agreement').classList.remove('open');
+			}
+		}
+	});
+}
+
+function enableSendButtonIfAllInputsAreValid() {
+	let name = document.querySelector('#name').getAttribute('validation');
+	let tel = document.querySelector('#tel').getAttribute('validation');
+	let email = document.querySelector('#email').getAttribute('validation');
+	let agreement = document.querySelector('#chk3').checked
+	let totalCount = (Number(document.querySelector('#totalCount').innerHTML) > 0);
+
+	if ( (name != null)
+		&& (tel != null)
+		&& (email != null)
+		&& agreement
+		&& totalCount ) {
+		document.querySelector('.bk_btn_wrap').classList.remove('disable');
+	} else {
+		document.querySelector('.bk_btn_wrap').classList.add('disable');
+	}
+}
 
 function setTime(response) {
 	let reservationDate = response.split('T')[0];
-	document.querySelector('.inline_control > .inline_txt').innerHTML = reservationDate.replace('-','.').replace('-','.') + ", 총 <span id=\"totalCount\">0</span>매";
+	document.querySelector('.inline_control > .inline_txt').firstChild.nodeValue = reservationDate.replace('-','.').replace('-','.') + ", 총 ";
 	document.querySelector('#reservationDate').value = response;
 }
 
 function renderPage(response) {
-	console.log("INFO" + response);
 	document.querySelector('.img_thumb').src = "/" + response.productImages[0].saveFileName;
 	makePriceList(response.productPrices);
+	setStoreDetail(response.displayInfo);
+}
+
+function setStoreDetail(displayInfo) {
+	document.querySelector('.top_title .title').innerHTML = displayInfo.productDescription;
+	var storeDetails = document.querySelectorAll('.store_details .dsc');
+	storeDetails[0].innerHTML = displayInfo.placeStreet;
+	storeDetails[1].innerHTML = displayInfo.openingHours;
 }
 
 function makePriceList(productPrices) {
@@ -63,24 +103,50 @@ function makePriceList(productPrices) {
 	var ticket_body = document.querySelector(".ticket_body");
 	ticket_body.innerHTML = resultHtml;
 
-	ticket_body.addEventListener("click",function(evt) {
-		if(evt.target.classList.contains('ico_minus3')) {
-			let count = Number(evt.target.parentNode.children[1].value);
-			evt.target.parentNode.children[1].value = --count;
-			setTotalPrice(evt.target.closest('.qty'), count);
-			document.querySelector('#totalCount').innerHTML = Number(document.querySelector('#totalCount').innerHTML) - 1;
-		} else if (evt.target.classList.contains('ico_plus3')) {
-			let count = Number(evt.target.parentNode.children[1].value);
-			evt.target.parentNode.children[1].value = ++count;
-			setTotalPrice(evt.target.closest('.qty'), count);
-			document.querySelector('#totalCount').innerHTML = Number(document.querySelector('#totalCount').innerHTML) + 1;
-		}
+	ticket_body.addEventListener("click", function(evt) {
+		ticketCounter(evt);
 	});
+}
+
+function ticketCounter(evt) {
+	if(evt.target.classList.contains('ico_minus3')) {
+		let count = Number(evt.target.parentNode.children[1].value);
+		if(count < 1) {
+			return;
+		}
+		evt.target.parentNode.children[1].value = --count;
+		if(count < 1) {
+			setMinusBtnDisabled(evt.target.closest('.qty'));
+		}
+		setTotalPrice(evt.target.closest('.qty'), count);
+		document.querySelector('#totalCount').innerHTML = Number(document.querySelector('#totalCount').innerHTML) - 1;
+	} else if (evt.target.classList.contains('ico_plus3')) {
+		let count = Number(evt.target.parentNode.children[1].value);
+		if(count < 1) {
+			setMinusBtnEnabled(evt.target.closest('.qty'));
+		}
+		evt.target.parentNode.children[1].value = ++count;
+		setTotalPrice(evt.target.closest('.qty'), count);
+		document.querySelector('#totalCount').innerHTML = Number(document.querySelector('#totalCount').innerHTML) + 1;
+	}
+	enableSendButtonIfAllInputsAreValid();
 }
 
 function setTotalPrice(parent, count) {
 	let price = Number(parent.querySelector('.price').innerHTML);
 	parent.querySelector('.total_price').innerText = price * count;
+}
+
+function setMinusBtnDisabled(parent) {
+	parent.querySelector('.ico_minus3').classList.add('disabled');
+	parent.querySelector('.count_control_input').classList.add('disabled');
+	parent.querySelector('.individual_price').classList.remove('on_color');
+}
+
+function setMinusBtnEnabled(parent) {
+	parent.querySelector('.ico_minus3').classList.remove('disabled');
+	parent.querySelector('.count_control_input').classList.remove('disabled');
+	parent.querySelector('.individual_price').classList.add('on_color');
 }
 
 function makeData() {
@@ -115,39 +181,48 @@ function makeData() {
 	data.reservationName = document.querySelector('#name').value;
 	data.reservationTelephone = document.querySelector('#tel').value;
 	data.reservationYearMonthDay =  document.querySelector('#reservationDate').value;
-	console.log(data);
-	
-	postAJAX('/api/reservations', postSuccess, data);
+
+	requestAjax.makeReservation(handlePostSuccess, data);
 }
 
-function postSuccess(response) {
+function handlePostSuccess(response) {
 	alert("예약 성공!");
+	location.replace("/mainpage");
 }
 
-function postAJAX(url, callback, data) {
-	var xhttp = new XMLHttpRequest();
-	xhttp.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200) {
-			callback(JSON.parse(this.response));
-		} else if (this.status > 200) {
-			console.log("ajax failure:" + url, this.readyState, this.status);
-		}
-	};
-	xhttp.open("POST", url, true);
-	xhttp.setRequestHeader("Content-type", "application/json");
-	xhttp.send(JSON.stringify(data));
+function clearInvalidInput(target) {
+	if(target.getAttribute('validation') == null) {
+		target.value = "";
+	}
 }
 
-function getAJAX(url, callback) {
-	var xhttp = new XMLHttpRequest();
-	xhttp.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200) {
-			callback(JSON.parse(this.response));
-		} else if (this.status > 200) {
-			console.log("ajax failure:" + url, this.readyState, this.status);
+function isValidInput(target) {
+	if (target.id == "name") {
+		if( target.value.length > 0 ) {
+			target.setAttribute('validation', '');
+		} else {
+			target.removeAttribute('validation');
 		}
-	};
-	xhttp.open("GET", url, true);
-	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-	xhttp.send();
+		enableSendButtonIfAllInputsAreValid();
+		return;
+	}
+	
+	var regExp = getRegExpById(target.id);
+	if(!target.value.match(regExp)) {
+		target.value = "형식이 틀렸거나 너무 짧아요";
+		target.removeAttribute('validation');
+	} else {
+		target.setAttribute('validation', '');
+	}
+	enableSendButtonIfAllInputsAreValid();
 }
+
+function getRegExpById(id) {
+	switch(id) {
+		case 'tel':
+			return /^\d{2,3}-\d{3,4}-\d{4}$/;
+		case 'email':
+			return /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;
+	}
+}
+

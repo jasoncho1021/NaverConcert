@@ -7,12 +7,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	document.querySelector('.nxt_inn').addEventListener('click', function(evt) {
 		carouselObj.moveNext();
-		setSpan();
+		setPageNum();
 	});
 
 	document.querySelector('.prev_inn').addEventListener('click', function(evt) {
 		carouselObj.movePrev();
-		setSpan();
+		setPageNum();
 	});
 
 	var openBtn = document.querySelector('._open');
@@ -49,13 +49,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	var reviewMoreBtn = document.querySelector('.btn_review_more');
 	reviewMoreBtn.addEventListener('click', function(evt) {
-		var html = reviewMoreBtn.getAttribute('href');
-		reviewMoreBtn.setAttribute('href', html + "?id=" + displayInfoId);
+		var reviewMoreHtml = reviewMoreBtn.getAttribute('href');
+		reviewMoreBtn.setAttribute('href', reviewMoreHtml + "?id=" + displayInfoId);
 	});
 });
 
 function makePage(response) {
-
 	if (response.productImages.length < 2) {
 		document.querySelector('.prev').style.display = 'none';
 		document.querySelector('.nxt').style.display = 'none';
@@ -76,19 +75,18 @@ function makeProductImageCarousel(productImages, productDescription) {
 	var template = document.querySelector('#productImageHandleBar').innerHTML;
 	var bindTemplate = Handlebars.compile(template);
 	var innerHtml = "";
-	
+
 	var productImageAdapter = {
 		"imgUrl" : "",
 		"productDescription" : productDescription
 	};
-	
-	var pageNum = 0;
-	var len = productImages.length;
-	if (len == 1) {
+
+	var imageLength = productImages.length;
+
+	if (imageLength == 1) {
 		productImageAdapter.imgUrl = productImages[0].saveFileName
 		innerHtml += bindTemplate(productImageAdapter);
-		pageNum = "1";
-	} else if ( len > 1 ) {
+	} else if ( imageLength == 2 ) {
 		productImageAdapter.imgUrl = productImages[1].saveFileName
 		innerHtml += bindTemplate(productImageAdapter);
 		productImageAdapter.imgUrl = productImages[0].saveFileName
@@ -97,15 +95,22 @@ function makeProductImageCarousel(productImages, productDescription) {
 		innerHtml += bindTemplate(productImageAdapter);
 		productImageAdapter.imgUrl = productImages[0].saveFileName
 		innerHtml += bindTemplate(productImageAdapter);
-		pageNum = "2";
+		carouselObj.twoImageFlag = true;
+	} else if ( imageLength > 2 ){
+		productImageAdapter.imgUrl = productImages[imageLength-1].saveFileName
+		innerHtml += bindTemplate(productImageAdapter);
+		for(let i = 0; i < imageLength-1; i++) {
+			productImageAdapter.imgUrl = productImages[i].saveFileName
+			innerHtml += bindTemplate(productImageAdapter);
+		}
 	}
 
 	document.querySelector('.visual_img').innerHTML = innerHtml;
-	document.querySelector('.figure_pagination .off span').innerHTML = pageNum;
-	
-	if(len > 1) {
+	document.querySelector('.figure_pagination .off span').innerHTML = imageLength;
+
+	if(imageLength > 1) {
 		carouselObj.initCarousel(document.querySelectorAll('.visual_img .item'));
-		setSpan();
+		setPageNum();
 	}
 }
 
@@ -123,7 +128,15 @@ function makeLocationInfo(response) {
 	makeComments(response, 3);
 }
 
-function setSpan() {
+function setPageNum() {
+	if(!carouselObj.twoImageFlag) {
+		document.querySelector('.figure_pagination span.num').innerHTML = carouselObj.currentTopIndex + 1;
+		return;
+	}
+	setTwoImagePageNum();
+}
+
+function setTwoImagePageNum() {
 	if(carouselObj.currentTopIndex > 1) {
 		document.querySelector('.figure_pagination span.num').innerHTML = carouselObj.currentTopIndex - 1;	
 	} else {

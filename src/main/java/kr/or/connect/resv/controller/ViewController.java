@@ -23,23 +23,14 @@ public class ViewController {
 		return "forward:/mainpage";
 	}
 
-	@GetMapping(path = "/detail")
-	public String getDetailPage(HttpSession session, ModelMap model) {
-		setSessionAttribute(session, model);
-		return "detail";
-	}
-
 	@GetMapping(path = "/mainpage")
 	public String getMainPage(HttpSession session, ModelMap model) {
-		setSessionAttribute(session, model);
 		return "mainpage";
 	}
 
-	private void setSessionAttribute(HttpSession session, ModelMap model) {
-		String reservationEmail = (String) session.getAttribute(ATTRIBUTE_NAME);
-		if (reservationEmail != null) {
-			model.addAttribute("reservationEmail", reservationEmail);
-		}
+	@GetMapping(path = "/detail")
+	public String getDetailPage(HttpSession session, ModelMap model) {
+		return "detail";
 	}
 
 	@GetMapping(path = "/review")
@@ -63,7 +54,6 @@ public class ViewController {
 
 		String sessionReservationEmail = (String) session.getAttribute(ATTRIBUTE_NAME);
 		if (sessionReservationEmail != null) {
-			setSessionAttribute(session, model);
 			return "myreservation";
 		}
 
@@ -73,7 +63,6 @@ public class ViewController {
 
 		if (reservationService.getReservations(reservationEmail).getSize() > 0) {
 			session.setAttribute(ATTRIBUTE_NAME, reservationEmail);
-			setSessionAttribute(session, model);
 			return "myreservation";
 		}
 

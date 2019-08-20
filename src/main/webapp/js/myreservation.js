@@ -1,101 +1,112 @@
 document.addEventListener("DOMContentLoaded", function() {
-	var url = '/api/reservations?reservationEmail='+ document.querySelector('#reservationEmail').value;
-	requestAjax.getData(url, makeReservationResult);
-	
+	requestAjax.getData('/api/reservations', compareTime); // 서버시간 요청
+
 	document.querySelector('.list_cards').addEventListener('click', function(evt) {
 		if(evt.target.parentNode.classList.contains('booking_cancel')) {
 			var confirmResult = confirm("취소하시겠습니까?");
 			if(confirmResult == true){
 				let reservationInfoId = evt.target.closest('article').querySelector('#reservationInfoId').value;
-				request( "/api/reservations/" + reservationInfoId, setCanceledReservation, evt.target);
+
+				cancelCallback = new CancelCallback(evt.target);
+				requestAjax.cancelReservation(reservationInfoId, passToCancelDelegator);
 			}
 		}
 	});
 	
 });
 
-function request(url, callback, target) {
-	var xhttp = new XMLHttpRequest();
-	xhttp.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200) {
-			callback(JSON.parse(this.response), target);
-		} else if (this.status > 200) {
-			console.log("ajax failure:" + url, this.readyState, this.status);
-		}
-	};
-	xhttp.open("PUT", url, true);
-	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-	xhttp.send();
+var serverTodayDate;
+
+function compareTime(response) {
+	serverTodayDate = new Date(response);
+	var url = '/api/reservations?reservationEmail='+ document.querySelector('#reservationEmail').value;
+	requestAjax.getData(url, makeReservationResult);
 }
 
-function setCanceledReservation(response, target) {
-	let article = target.closest('article');
-	target.closest('li').removeChild(article);
+var cancelCallback;
+
+function CancelCallback(target){
+	this.target = target;
+};
+
+CancelCallback.prototype.moveToCanceled = function (response){  
+	let article = this.target.closest('article');
+	this.target.closest('li').removeChild(article);
 	let cancelButton = article.querySelector('.booking_cancel');
 	let shareButton = article.querySelector('.btn_goto_share');
 	shareButton.parentNode.removeChild(shareButton);
 	cancelButton.parentNode.removeChild(cancelButton);
 	document.querySelector('li.cancel').appendChild(article);
+
+	setSummaryBoardCountAfterCancel();
+};
+
+function setSummaryBoardCountAfterCancel() {
+	let summaryList = document.querySelectorAll('.summary_board .item');
+	let confirmedCount = Number(summaryList[1].querySelector('.figure').innerHTML);
+	let canceledCount = Number(summaryList[3].querySelector('.figure').innerHTML);
+
+	summaryList[1].querySelector('.figure').innerHTML = confirmedCount - 1;; 
+	summaryList[3].querySelector('.figure').innerHTML = canceledCount + 1;
+}
+
+function passToCancelDelegator(response) {
+	cancelCallback.moveToCanceled(response);
 }
 
 function makeReservationResult(response) {
-	let resultConfirmHtml = document.querySelector("#confirmedDiv").innerHTML;
-	resultConfirmHtml = resultConfirmHtml.replace("{{rType}}", "예약 확정");
-	let resultCancelHtml = document.querySelector("#confirmedDiv").innerHTML;
-	resultCancelHtml = resultCancelHtml.replace("{{rType}}", "취소된 예약");
+	let resultConfirmHtml = "";
+	let resultCancelHtml = "";
+	let resultUsedHtml = "";
+
 	let reservationTemplate = document.querySelector("#reservationItem").innerHTML;
 	let cancelButton = document.querySelector("#cancelButton").innerHTML;
 	let shareButton = document.querySelector("#shareButton").innerHTML;
+	let reviewButton = document.querySelector("#reviewButton").innerHTML;
+
+	let confirmedCount = 0;
+	let usedCount = 0;
+	let canceledCount = 0;
 	
+	let reservations = response.reservations;
 	for(let i = 0; i < response.size; i++) {
-		if( response.reservations[i].cancelYn ) {
-			resultCancelHtml += reservationTemplate.replace("{{reservationInfoId}}", response.reservations[i].reservationInfoId)
-											.replace("{{productDescription}}", response.reservations[i].displayInfo.productDescription)
-											.replace("{{placeName}}", response.reservations[i].displayInfo.placeName)
-											.replace("{{totalPrice}}", response.reservations[i].totalPrice)
+		if( reservations[i].cancelYn ) {
+			resultCancelHtml += reservationTemplate.replace("{{reservationInfoId}}", reservations[i].reservationInfoId)
+											.replace("{{productDescription}}", reservations[i].displayInfo.productDescription)
+											.replace("{{placeName}}", reservations[i].displayInfo.placeName)
+											.replace("{{totalPrice}}", reservations[i].totalPrice)
 											.replace("{{editButton}}", "")
 											.replace("{{shareButton}}", "");
-		} else {
-			resultConfirmHtml += reservationTemplate.replace("{{reservationInfoId}}", response.reservations[i].reservationInfoId)
-							.replace("{{productDescription}}", response.reservations[i].displayInfo.productDescription)
-							.replace("{{placeName}}", response.reservations[i].displayInfo.placeName)
-							.replace("{{totalPrice}}", response.reservations[i].totalPrice)
-							.replace("{{editButton}}", cancelButton)
-							.replace("{{shareButton}}", shareButton);
+			canceledCount++;
+		} else { 
+			let date = new Date(reservations[i].reservationDate);
+			if(date < serverTodayDate) {
+				resultUsedHtml += reservationTemplate.replace("{{reservationInfoId}}", reservations[i].reservationInfoId)
+											.replace("{{productDescription}}", reservations[i].displayInfo.productDescription)
+											.replace("{{placeName}}", reservations[i].displayInfo.placeName)
+											.replace("{{totalPrice}}", reservations[i].totalPrice)
+											.replace("{{editButton}}", reviewButton)
+											.replace("{{shareButton}}", "");
+				usedCount++;
+			} else {
+				resultConfirmHtml += reservationTemplate.replace("{{reservationInfoId}}", reservations[i].reservationInfoId)
+								.replace("{{productDescription}}", reservations[i].displayInfo.productDescription)
+								.replace("{{placeName}}", reservations[i].displayInfo.placeName)
+								.replace("{{totalPrice}}", reservations[i].totalPrice)
+								.replace("{{editButton}}", cancelButton)
+								.replace("{{shareButton}}", shareButton);
+				confirmedCount++;
+			}
 		}
 	}
-	document.querySelector('li.cancel').innerHTML = resultCancelHtml;
-	document.querySelector('li.confirmed').innerHTML = resultConfirmHtml;
+	document.querySelector('li.confirmed').innerHTML += resultConfirmHtml;
+	document.querySelector('li.used').innerHTML += resultUsedHtml;
+	document.querySelector('li.cancel').innerHTML += resultCancelHtml;
+
+	let summaryList = document.querySelectorAll('.summary_board .item');
+	summaryList[0].querySelector('.figure').innerHTML = confirmedCount + usedCount + canceledCount;
+	summaryList[1].querySelector('.figure').innerHTML = confirmedCount;
+	summaryList[2].querySelector('.figure').innerHTML = usedCount;
+	summaryList[3].querySelector('.figure').innerHTML = canceledCount;
 }
 
-var requestAjax = {
-	defaultType : "application/x-www-form-urlencoded",
-	jsonType : "application/json",
-	cancelUrl : "/api/reservations/",
-
-	getData(url, callback) {
-		this.request(url, callback, "GET", this.defaultType);
-	},
-
-	cancelReservation(id, callback) {
-		this.request(this.cancelUrl + id, callback, "PUT", this.defaultType);
-	},
-
-	makeReservation(url, callback) {
-		this.request(url, callback, "POST", this.jsonType);
-	},
-
-	request(url, callback, httpMethod, contentType) {
-		var xhttp = new XMLHttpRequest();
-		xhttp.onreadystatechange = function() {
-			if (this.readyState == 4 && this.status == 200) {
-				callback(JSON.parse(this.response));
-			} else if (this.status > 200) {
-				console.log("ajax failure:" + url, this.readyState, this.status);
-			}
-		};
-		xhttp.open(httpMethod, url, true);
-		xhttp.setRequestHeader("Content-type", contentType);
-		xhttp.send();
-	}
-};

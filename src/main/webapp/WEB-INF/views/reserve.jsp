@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html lang="ko">
 
 <head>
@@ -32,26 +32,26 @@
                 <div class="group_visual">
                     <div class="container_visual" style="width: 414px;">
                         <ul class="visual_img">
-                            <li class="item" style="width: 414px;"> <img alt="" class="img_thumb" src=""> <span class="img_bg"></span>
+                            <li class="item" style="width: 414px;"> <img alt="제품이미지" class="img_thumb" src=""> <span class="img_bg"></span>
                                 <div class="preview_txt">
-                                    <h2 class="preview_txt_tit"></h2> <em class="preview_txt_dsc">₩12,000 ~ </em><em class="preview_txt_dsc">2017.2.17.(금)~2017.4.18.(화), 잔여티켓 2769매</em> </div>
+                                    <h2 class="preview_txt_tit"></h2> <em class="preview_txt_dsc"> </em><em class="preview_txt_dsc"></em> </div>
                             </li>
                         </ul>
                     </div>
                 </div>
                 <div class="section_store_details">
                     <div class="store_details">
-                        <h3 class="in_tit"></h3>
+                        <h3 class="in_tit">장소</h3>
                         <p class="dsc">
-                            장소 : <br> 기간 : 2017.2.17.(금)~2017.4.18.(화)
+                         
                         </p>
                         <h3 class="in_tit">관람시간</h3>
                         <p class="dsc">
-                            화, 목, 금 일요일 10:00am~06:00pm(입장마감 05:30pm)<br> ‘문화가 있는 날’ 매월 마지막 주 수요일은 오후 8시까지 연장
+                       
                         </p>
-                        <h3 class="in_tit">요금</h3>
+                        <h3 class="in_tit"></h3>
                         <p class="dsc">
-                            성인(만 19~64세) 5,000원 / 청소년(만 13~18세) 4,000원<br> 어린이(만 4~12세) 3,000원 / 20인 이상 단체 20% 할인<br> 국가유공자, 장애인, 65세 이상 4,000원
+                        
                         </p>
                     </div>
                 </div>
@@ -112,16 +112,16 @@
                             <div class="agreement_nessasary help_txt"> <span class="spr_book ico_nessasary"></span> <span>필수입력</span> </div>
                             <form class="form_horizontal">
                                 <div class="inline_form"> <label class="label" for="name"> <span class="spr_book ico_nessasary">필수</span> <span>예매자</span> </label>
-                                    <div class="inline_control"> <input type="text" name="name" id="name" class="text" placeholder="네이버" maxlength="17"> </div>
+                                    <div class="inline_control"> <input type="text" name="name" id="name" class="text" placeholder="네이버" maxlength="17" onfocusout="isValidInput(this)"> </div>
                                 </div>
                                 <div class="inline_form"> <label class="label" for="tel"> <span class="spr_book ico_nessasary">필수</span> <span>연락처</span> </label>
                                     <div class="inline_control tel_wrap">
-                                        <input type="tel" name="tel" id="tel" class="tel" value="" placeholder="휴대폰 입력 시 예매내역 문자발송">
+                                        <input type="tel" name="tel" id="tel" class="tel" value="" placeholder="휴대폰 입력 시 예매내역 문자발송" onfocus="clearInvalidInput(this)" onfocusout="isValidInput(this)">
                                         <div class="warning_msg">형식이 틀렸거나 너무 짧아요</div>
                                     </div>
                                 </div>
                                 <div class="inline_form"> <label class="label" for="email">  <span class="spr_book ico_nessasary">필수</span>  <span>이메일</span> </label>
-                                    <div class="inline_control"> <input type="email" name="email" id="email" class="email" value="" placeholder="crong@codesquad.kr" maxlength="50"> </div>
+                                    <div class="inline_control"> <input type="email" name="email" id="email" class="email" value="" placeholder="crong@codesquad.kr" maxlength="50" onfocus="clearInvalidInput(this)" onfocusout="isValidInput(this)"> </div>
                                 </div>
                                 <div class="inline_form last"> <label class="label" for="message">예매내용</label>
                                     <div class="inline_control">
@@ -175,11 +175,11 @@
 		       <div class="qty">
                             <div class="count_control">
                                 <div class="clearfix">
-                                    <a class="btn_plus_minus spr_book2 ico_minus3" title="빼기"> </a>
-									 <input type="tel" class="count_control_input" value="0" readonly title="수량">
+                                    <a class="btn_plus_minus spr_book2 ico_minus3 disabled" title="빼기"> </a>
+									 <input type="tel" class="count_control_input disabled" value="0" readonly title="수량">
                                     <a class="btn_plus_minus spr_book2 ico_plus3" title="더하기"> </a>
                                 </div>
-                                <div class="individual_price on_color"><span class="total_price">0</span><span class="price_type">원</span></div>
+                                <div class="individual_price"><span class="total_price">0</span><span class="price_type">원</span></div>
                             </div>
                             <div class="qty_info_icon"> <strong class="product_amount"> <span>{{priceType}}</span> </strong> <strong class="product_price"> <span class="price">{{price}}</span> <span class="price_type">원</span> </strong> <em class="product_dsc">{{price}}원 ({{discountRate}}% 할인가)</em> </div>
 							<input type=hidden id="productPriceId" name="productPriceId" value="{{productPriceId}}">
@@ -187,6 +187,7 @@
                         </div>
 </script>
 	<script src="/js/reservation.js"></script>
+	<script src="/js/repository.js"></script>
 </body>
 
 </html>
