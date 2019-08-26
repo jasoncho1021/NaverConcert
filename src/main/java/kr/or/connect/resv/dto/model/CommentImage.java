@@ -1,14 +1,20 @@
 package kr.or.connect.resv.dto.model;
 
+import java.time.LocalDateTime;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class CommentImage {
 
 	private String contentType;
-	private String createDate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+	private LocalDateTime createDate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+	private LocalDateTime modifyDate;
 	private boolean deleteFlag;
 	private int fileId;
 	private String fileName;
 	private int imageId;
-	private String modifyDate;
 	private int reservationInfoId;
 	private int reservationUserCommentId;
 	private String saveFileName;
@@ -18,12 +24,6 @@ public class CommentImage {
 	}
 	public void setContentType(String contentType) {
 		this.contentType = contentType;
-	}
-	public String getCreateDate() {
-		return createDate;
-	}
-	public void setCreateDate(String createDate) {
-		this.createDate = createDate;
 	}
 	public boolean isDeleteFlag() {
 		return deleteFlag;
@@ -49,10 +49,16 @@ public class CommentImage {
 	public void setImageId(int imageId) {
 		this.imageId = imageId;
 	}
-	public String getModifyDate() {
+	public LocalDateTime getCreateDate() {
+		return createDate;
+	}
+	public void setCreateDate(LocalDateTime createDate) {
+		this.createDate = createDate;
+	}
+	public LocalDateTime getModifyDate() {
 		return modifyDate;
 	}
-	public void setModifyDate(String modifyDate) {
+	public void setModifyDate(LocalDateTime modifyDate) {
 		this.modifyDate = modifyDate;
 	}
 	public int getReservationInfoId() {

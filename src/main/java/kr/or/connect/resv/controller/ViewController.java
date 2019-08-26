@@ -1,5 +1,6 @@
 package kr.or.connect.resv.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,6 @@ import kr.or.connect.resv.service.ReservationService;
 
 @Controller
 public class ViewController {
-
 	private static final String ATTRIBUTE_NAME = "RESERVATION_EMAIL";
 
 	@Autowired
@@ -24,12 +24,12 @@ public class ViewController {
 	}
 
 	@GetMapping(path = "/mainpage")
-	public String getMainPage(HttpSession session, ModelMap model) {
+	public String getMainPage() {
 		return "mainpage";
 	}
 
 	@GetMapping(path = "/detail")
-	public String getDetailPage(HttpSession session, ModelMap model) {
+	public String getDetailPage() {
 		return "detail";
 	}
 
@@ -44,8 +44,17 @@ public class ViewController {
 	}
 
 	@GetMapping(path = "/bookinglogin")
-	public String getBookingLoginPage(HttpSession session) {
+	public String getBookingLoginPage() {
 		return "bookinglogin";
+	}
+
+	@GetMapping(path = "/reviewWrite")
+	public String getReviewWritePage(HttpServletRequest request, ModelMap model) {
+		model.addAttribute("productId", request.getParameter("productId"));
+		model.addAttribute("reservationInfoId", request.getParameter("reservationInfoId"));
+		model.addAttribute("productDescription", request.getParameter("productDescription"));
+
+		return "reviewWrite";
 	}
 
 	@GetMapping(path = "/login")

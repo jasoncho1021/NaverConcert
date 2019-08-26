@@ -83,24 +83,28 @@ function makeProductImageCarousel(productImages, productDescription) {
 
 	var imageLength = productImages.length;
 
+	if(imageLength > 2) {
+		imageLength = 2;
+	}
+
 	if (imageLength == 1) {
-		productImageAdapter.imgUrl = productImages[0].saveFileName
+		productImageAdapter.imgUrl = productImages[0].fileInfoId;
 		innerHtml += bindTemplate(productImageAdapter);
 	} else if ( imageLength == 2 ) {
-		productImageAdapter.imgUrl = productImages[1].saveFileName
+		productImageAdapter.imgUrl = productImages[1].fileInfoId;
 		innerHtml += bindTemplate(productImageAdapter);
-		productImageAdapter.imgUrl = productImages[0].saveFileName
+		productImageAdapter.imgUrl = productImages[0].fileInfoId;
 		innerHtml += bindTemplate(productImageAdapter);
-		productImageAdapter.imgUrl = productImages[1].saveFileName
+		productImageAdapter.imgUrl = productImages[1].fileInfoId;
 		innerHtml += bindTemplate(productImageAdapter);
-		productImageAdapter.imgUrl = productImages[0].saveFileName
+		productImageAdapter.imgUrl = productImages[0].fileInfoId;
 		innerHtml += bindTemplate(productImageAdapter);
 		carouselObj.twoImageFlag = true;
 	} else if ( imageLength > 2 ){
-		productImageAdapter.imgUrl = productImages[imageLength-1].saveFileName
+		productImageAdapter.imgUrl = productImages[imageLength-1].fileInfoId;
 		innerHtml += bindTemplate(productImageAdapter);
 		for(let i = 0; i < imageLength-1; i++) {
-			productImageAdapter.imgUrl = productImages[i].saveFileName
+			productImageAdapter.imgUrl = productImages[i].fileInfoId;
 			innerHtml += bindTemplate(productImageAdapter);
 		}
 	}

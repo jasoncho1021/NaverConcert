@@ -65,8 +65,7 @@ function makeList(response) {
 		resultHTML[i % 2] += itemListHtml.replace("{{id}}",productLimitList[i].displayInfoId)
 								.replace("{{id}}}", productLimitList[i].productId)
 								.replace("{{description}}", productLimitList[i].productDescription)
-								//.replace("{{imgUrl}}", productLimitList[i].productImageUrl)
-								.replace("{{imgUrl}}", "productImages")
+								.replace("{{imgUrl}}", productLimitList[i].productId)
 								.replace("{{description}}", productLimitList[i].productDescription)
 								.replace("{{placename}}", productLimitList[i].placeName)
 								.replace("{{content}}", productLimitList[i].productContent);
@@ -82,9 +81,9 @@ function makePromoList(response) {
 	var promoList = response.items;
 	var len = promoList.length;
 
-	resultHTML += promotionItems.replace("{{imgUrl}}", promoList[len-1].productImageUrl);
+	resultHTML += promotionItems.replace("{{imgUrl}}", promoList[len-1].productId);
 	for (var i = 0; i < len-1; i++) {
-		resultHTML += promotionItems.replace("{{imgUrl}}", promoList[i].productImageUrl);
+		resultHTML += promotionItems.replace("{{imgUrl}}", promoList[i].productId);
 	}
 	promotionImgUlTag.innerHTML += resultHTML;
 

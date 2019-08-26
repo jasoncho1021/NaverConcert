@@ -13,7 +13,6 @@ import kr.or.connect.resv.service.CategoryService;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
-
 	@Autowired
 	private ReservationManagerDao reservationManagerDao;
 
@@ -25,5 +24,4 @@ public class CategoryServiceImpl implements CategoryService {
 		categoryDTO.setItems(categoryItems);
 		return categoryDTO;
 	}
-
 }

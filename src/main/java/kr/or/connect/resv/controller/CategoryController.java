@@ -11,7 +11,6 @@ import kr.or.connect.resv.service.CategoryService;
 @RestController
 @RequestMapping(path="/api/categories")
 public class CategoryController {
-	
 	@Autowired
 	CategoryService categoryService;
 	

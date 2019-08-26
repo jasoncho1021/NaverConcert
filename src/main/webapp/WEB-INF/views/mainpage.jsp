@@ -26,8 +26,7 @@
 						class="spr_bi ico_bk_logo">예약</span>
 					</a>
 				</h1>
-				<c:set var="data" value="개발자" />
- 
+
 <c:choose>
     <c:when test = "${not empty reservationEmail}">
 		<a href="login" class="btn_my"> <span class="viewReservation" title="${reservationEmail}">${reservationEmail}</span></a>
@@ -127,7 +126,7 @@
 
 
 	<script type="rv-template" id="promotionItem">
-	<li class="item" style="background-image: url(/{{imgUrl}}); background-size: 100% 100%;">
+	<li class="item" style="background-image: url(images/product/{{imgUrl}}); background-size: 100% 100%;">
         <a href="#"> <span class="img_btm_border"></span> <span class="img_right_border"></span> <span class="img_bg_gra"></span>
             <div class="event_txt">
                 <h4 class="event_txt_tit"></h4>
@@ -142,7 +141,7 @@
         <li class="item">
             <a href="detail?id={{id}}" class="item_book">
                 <div class="item_preview">
-					<img alt="{{description}}" class="img_thumb" src="/{{imgUrl}}">
+					<img alt="{{description}}" class="img_thumb" src="images/product/{{imgUrl}}">
                     <span class="img_border"></span>
                 </div>
                 <div class="event_txt">

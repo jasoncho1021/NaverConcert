@@ -76,7 +76,7 @@ public class ReservationManagerDaoSql {
 													"product_price " + 
 													"where " + 
 													"product_id = :productId";
-	public static final String SELECT_TOTAL_PRICE_BY_RESERVATION_INFO_ID="select sum(pp.price * rip.count) as totalprice " + 
+	/*public static final String SELECT_TOTAL_PRICE_BY_RESERVATION_INFO_ID="select sum(pp.price * rip.count) as totalprice " + 
 																		"from reservation_info_price rip " + 
 																		"join product_price pp on rip.product_price_id = pp.id and rip.reservation_info_id = :reservationInfoId";
 	public static final String SELECT_RESERVATION_INFO_BY_RESERVATION_EMAIL="select " + 
@@ -86,8 +86,8 @@ public class ReservationManagerDaoSql {
 																			"ri.reservation_tel as reservation_telephone " + 
 																			"from reservation_info ri " + 
 																			"where " + 
-																			"ri.reservation_email = :reservationEmail";
-	public static final String SELECT_RESERVATION_RESPONSE_BY_RESERVATION_INFO_ID="select " + 
+																			"ri.reservation_email = :reservationEmail";*/
+	/*public static final String SELECT_RESERVATION_RESPONSE_BY_RESERVATION_INFO_ID="select " + 
 																			"cancel_flag as cancel_yn, " + 
 																			"create_date, " + 
 																			"display_info_id, " + 
@@ -106,6 +106,6 @@ public class ReservationManagerDaoSql {
 																					"from " + 
 																					"reservation_info_price " + 
 																					"where " + 
-																					"reservation_info_id = :reservationInfoId";
-	public static final String UPDATE_RESERVAION_INFO_CANCEL="update reservation_info set cancel_flag = 1, modify_date = now() where id = :reservationInfoId";
+																					"reservation_info_id = :reservationInfoId";*/
+	/*public static final String UPDATE_RESERVAION_INFO_CANCEL="update reservation_info set cancel_flag = 1, modify_date = now() where id = :reservationInfoId";*/
 }

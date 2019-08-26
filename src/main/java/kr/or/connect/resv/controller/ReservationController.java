@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import kr.or.connect.resv.dto.CommentResponse;
 import kr.or.connect.resv.dto.ReservationInfoResponse;
 import kr.or.connect.resv.dto.ReservationResponse;
 import kr.or.connect.resv.dto.model.ReservationParam;
@@ -21,7 +23,6 @@ import kr.or.connect.resv.service.ReservationService;
 @RestController
 @RequestMapping(path = "/api/reservations")
 public class ReservationController {
-
 	@Autowired
 	private ReservationService reservationService;
 
@@ -42,7 +43,8 @@ public class ReservationController {
 
 	@PostMapping
 	public ReservationResponse makeReservation(@RequestBody ReservationParam reservationParam) {
-		return reservationService.makeReservation(reservationParam);
+		int reservationInfoId = reservationService.makeReservation(reservationParam);
+		return reservationService.makeReservationResponse(reservationInfoId);
 	}
 
 	@PutMapping("/{reservationId}")
@@ -50,4 +52,20 @@ public class ReservationController {
 		return reservationService.cancelReservation(reservationId);
 	}
 
+	@PostMapping("/{reservationInfoId}/comments")
+	public CommentResponse makeReservationComment(@RequestParam(value = "comment", required = true) String comment,
+			@RequestParam(value = "productId", required = true) Integer productId,
+			@RequestParam(value = "score", required = true) Integer score,
+			@RequestParam("attachedImage") MultipartFile attachedImage, @PathVariable Integer reservationInfoId) {
+
+		CommentResponse requestParams = new CommentResponse();
+		requestParams.setProductId(productId);
+		requestParams.setScore(score);
+		requestParams.setComment(comment);
+		requestParams.setReservationInfoId(reservationInfoId);
+
+		int reservationUserCommentId = reservationService.makeReservationComment(requestParams, attachedImage);
+
+		return reservationService.getCommentResponse(reservationUserCommentId);
+	}
 }

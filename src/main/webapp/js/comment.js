@@ -42,7 +42,7 @@ function makeCommentsByHandleBar(comments, lenLimit) {
 		}
 		if(comment.commentImages.length > 0) {
 			comment.imgExist = "block";
-			comment.imgUrl = comment.commentImages[0].saveFileName;
+			comment.imgUrl = "images/comment/" + comment.commentImages[0].imageId;
 			comment.imgCount = comment.commentImages.length;
 		} else {
 			comment.imgExist = "none";

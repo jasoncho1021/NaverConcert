@@ -13,7 +13,6 @@ import kr.or.connect.resv.service.PromotionService;
 
 @Service
 public class PromotionServiceImpl implements PromotionService {
-
 	@Autowired
 	private ReservationManagerDao reservationManagerDao;
 
@@ -21,18 +20,8 @@ public class PromotionServiceImpl implements PromotionService {
 	@Transactional(readOnly = true)
 	public PromotionDTO getAllPromotions() {
 		List<Promotion> promotionList = reservationManagerDao.selectAllPromotions();
-
-		for (Promotion promotion : promotionList) {
-			promotion.setProductImageUrl(getFileName(promotion.getId()));
-		}
-
 		PromotionDTO promotionDTO = new PromotionDTO();
 		promotionDTO.setItems(promotionList);
 		return promotionDTO;
-	}
-
-	@Transactional(readOnly = true)
-	private String getFileName(Integer id) {
-		return reservationManagerDao.selectFileName(id);
 	}
 }

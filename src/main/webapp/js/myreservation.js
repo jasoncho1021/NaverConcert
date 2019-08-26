@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", function() {
 			}
 		}
 	});
-	
 });
 
 var serverTodayDate;
@@ -67,7 +66,7 @@ function makeReservationResult(response) {
 	let confirmedCount = 0;
 	let usedCount = 0;
 	let canceledCount = 0;
-	
+
 	let reservations = response.reservations;
 	for(let i = 0; i < response.size; i++) {
 		if( reservations[i].cancelYn ) {
@@ -81,11 +80,16 @@ function makeReservationResult(response) {
 		} else { 
 			let date = new Date(reservations[i].reservationDate);
 			if(date < serverTodayDate) {
+				let requestParams = "productId=" + reservations[i].productId + "&" 
+									+ "reservationInfoId=" + reservations[i].reservationInfoId + "&"
+									+ "productDescription=" + reservations[i].displayInfo.productDescription;
+				let reviewButtonWithHref = reviewButton.replace("{{requestParams}}", requestParams);
+
 				resultUsedHtml += reservationTemplate.replace("{{reservationInfoId}}", reservations[i].reservationInfoId)
 											.replace("{{productDescription}}", reservations[i].displayInfo.productDescription)
 											.replace("{{placeName}}", reservations[i].displayInfo.placeName)
 											.replace("{{totalPrice}}", reservations[i].totalPrice)
-											.replace("{{editButton}}", reviewButton)
+											.replace("{{editButton}}", reviewButtonWithHref)
 											.replace("{{shareButton}}", "");
 				usedCount++;
 			} else {

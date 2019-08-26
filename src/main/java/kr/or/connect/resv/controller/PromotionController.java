@@ -9,12 +9,11 @@ import kr.or.connect.resv.dto.PromotionDTO;
 import kr.or.connect.resv.service.PromotionService;
 
 @RestController
-@RequestMapping(path="/api/promotions")
+@RequestMapping(path = "/api/promotions")
 public class PromotionController {
-
 	@Autowired
 	PromotionService promotionService;
-	
+
 	@GetMapping
 	public PromotionDTO getPromo() {
 		return promotionService.getAllPromotions();

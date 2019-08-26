@@ -22,7 +22,6 @@ import kr.or.connect.resv.service.ProductService;
 
 @Service
 public class ProductServiceImpl implements ProductService {
-
 	@Autowired
 	private ReservationManagerDao reservationManagerDao;
 
@@ -45,26 +44,14 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	private ProductDTO getProductDTO(List<Product> productList) {
-		setProductImageUrl(productList);
 		ProductDTO productDTO = new ProductDTO();
 		productDTO.setItems(productList);
 		return productDTO;
 	}
 
-	private void setProductImageUrl(List<Product> productList) {
-		for (Product product : productList) {
-			product.setProductImageUrl(getFileName(product.getProductId()));
-		}
-	}
-
 	@Transactional(readOnly = true)
 	public Integer getCategoryCount(Integer categoryId) {
 		return reservationManagerDao.selectCategoryCount(categoryId);
-	}
-
-	@Transactional(readOnly = true)
-	private String getFileName(Integer id) {
-		return reservationManagerDao.selectFileName(id);
 	}
 
 	@Override
@@ -88,7 +75,6 @@ public class ProductServiceImpl implements ProductService {
 		return displayInfoDTO;
 	}
 
-	@Transactional(readOnly = true)
 	private List<Comment> getCommentsByDisplayInfoId(Integer displayInfoId) {
 		Map<Integer, Comment> commentMap = new HashMap<>();
 
@@ -108,32 +94,26 @@ public class ProductServiceImpl implements ProductService {
 		return comments.stream().mapToDouble(Comment::getScore).average().orElse(0);
 	}
 
-	@Transactional(readOnly = true)
 	private List<Comment> getComments(Integer displayInfoId) {
 		return reservationManagerDao.selectCommentsByDisplayInfoId(displayInfoId);
 	}
 
-	@Transactional(readOnly = true)
 	private List<CommentImage> getCommentImages(Integer displayInfoId) {
 		return reservationManagerDao.selectCommentImagesByDisplayInfoId(displayInfoId);
 	}
 
-	@Transactional(readOnly = true)
 	private DisplayInfo getDisplayInfo(Integer displayInfoId) {
 		return reservationManagerDao.selectDisplayInfoByDisplayInfoId(displayInfoId);
 	}
 
-	@Transactional(readOnly = true)
 	private DisplayInfoImage getDisplayInfoImage(Integer displayInfoId) {
 		return reservationManagerDao.selectDisplayInfoImageByDisplayInfoId(displayInfoId);
 	}
 
-	@Transactional(readOnly = true)
 	private List<ProductImage> getProductImages(Integer productId) {
 		return reservationManagerDao.selectProductImageFileNames(productId);
 	}
 
-	@Transactional(readOnly = true)
 	private List<ProductPrice> getProductPrices(Integer productId) {
 		return reservationManagerDao.selectProductPricesByProductId(productId);
 	}

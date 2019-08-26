@@ -62,7 +62,7 @@ function setTime(response) {
 }
 
 function renderPage(response) {
-	document.querySelector('.img_thumb').src = "/" + response.productImages[0].saveFileName;
+	document.querySelector('.img_thumb').src = "images/" + response.productImages[0].fileInfoId;
 	makePriceList(response.productPrices);
 	setStoreDetail(response.displayInfo);
 }
@@ -206,7 +206,7 @@ function isValidInput(target) {
 		enableSendButtonIfAllInputsAreValid();
 		return;
 	}
-	
+
 	var regExp = getRegExpById(target.id);
 	if(!target.value.match(regExp)) {
 		target.value = "형식이 틀렸거나 너무 짧아요";
