@@ -223,7 +223,6 @@
 					</script>
 		<script src="/js/myreservation.js"></script>
 		<script src="/js/repository.js"></script>
-
 	</body>
 
 	</html>

@@ -154,6 +154,7 @@
 	<script src="/js/mainpageAPI.js"></script>
 	<script src="/js/comment.js"></script>
 	<script src="/js/carousel.js"></script>
+	<script src="/js/classListAlter.js"></script>
 </body>
 
 </html>

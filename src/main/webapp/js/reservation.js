@@ -17,7 +17,7 @@ function initAgreementCheckListener() {
 
 function initReservationConfirmBtnListener() {
 	document.querySelector('.bk_btn_wrap').addEventListener('click', function(evt) {
-		if (this.classList.contains('disable')) {
+		if (this.matches('.disable')) {
 			return;
 		} else {
 			makeData();
@@ -27,11 +27,12 @@ function initReservationConfirmBtnListener() {
 
 function initToggleListener() {
 	document.querySelector('.section_booking_agreement').addEventListener('click', function(evt) {
-		if(evt.target.classList.contains('btn_text')) {
-			if(!evt.target.closest('.agreement').classList.contains('open')) {
-				evt.target.closest('.agreement').classList.add('open');
+		if(evt.target.matches('.btn_text')) {
+			let agreement = evt.target.closest('.agreement');
+			if(!agreement.matches('.open')) {
+				addClassName(agreement, 'open');
 			} else {
-				evt.target.closest('.agreement').classList.remove('open');
+				removeClassName(agreement, 'open');
 			}
 		}
 	});
@@ -44,14 +45,15 @@ function enableSendButtonIfAllInputsAreValid() {
 	let agreement = document.querySelector('#chk3').checked
 	let totalCount = (Number(document.querySelector('#totalCount').innerHTML) > 0);
 
+	let sendButton = document.querySelector('.bk_btn_wrap');
 	if ( (name != null)
 		&& (tel != null)
 		&& (email != null)
 		&& agreement
 		&& totalCount ) {
-		document.querySelector('.bk_btn_wrap').classList.remove('disable');
+		removeClassName(sendButton, 'disable');
 	} else {
-		document.querySelector('.bk_btn_wrap').classList.add('disable');
+		addClassName(sendButton, 'disable');
 	}
 }
 
@@ -109,7 +111,7 @@ function makePriceList(productPrices) {
 }
 
 function ticketCounter(evt) {
-	if(evt.target.classList.contains('ico_minus3')) {
+	if(evt.target.matches('.ico_minus3')) {
 		let count = Number(evt.target.parentNode.children[1].value);
 		if(count < 1) {
 			return;
@@ -120,7 +122,7 @@ function ticketCounter(evt) {
 		}
 		setTotalPrice(evt.target.closest('.qty'), count);
 		document.querySelector('#totalCount').innerHTML = Number(document.querySelector('#totalCount').innerHTML) - 1;
-	} else if (evt.target.classList.contains('ico_plus3')) {
+	} else if (evt.target.matches('.ico_plus3')) {
 		let count = Number(evt.target.parentNode.children[1].value);
 		if(count < 1) {
 			setMinusBtnEnabled(evt.target.closest('.qty'));
@@ -138,15 +140,15 @@ function setTotalPrice(parent, count) {
 }
 
 function setMinusBtnDisabled(parent) {
-	parent.querySelector('.ico_minus3').classList.add('disabled');
-	parent.querySelector('.count_control_input').classList.add('disabled');
-	parent.querySelector('.individual_price').classList.remove('on_color');
+	addClassName(parent.querySelector('.ico_minus3'),'disabled');
+	addClassName(parent.querySelector('.count_control_input'),'disabled');
+	removeClassName(parent.querySelector('.individual_price'),'on_color');
 }
 
 function setMinusBtnEnabled(parent) {
-	parent.querySelector('.ico_minus3').classList.remove('disabled');
-	parent.querySelector('.count_control_input').classList.remove('disabled');
-	parent.querySelector('.individual_price').classList.add('on_color');
+	removeClassName(parent.querySelector('.ico_minus3'),'disabled');
+	removeClassName(parent.querySelector('.count_control_input'),'disabled');
+	addClassName(parent.querySelector('.individual_price'), 'on_color');
 }
 
 function makeData() {
@@ -225,4 +227,3 @@ function getRegExpById(id) {
 			return /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;
 	}
 }
-

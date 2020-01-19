@@ -259,6 +259,7 @@
     <script src="/js/detailpageAPI.js"></script>
     <script src="/js/comment.js"></script>
     <script src="/js/carousel.js"></script>
+    <script src="/js/classListAlter.js"></script>
 </body>
 
 

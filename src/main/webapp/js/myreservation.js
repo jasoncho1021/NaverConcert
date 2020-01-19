@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	requestAjax.getData('/api/reservations', compareTime); // 서버시간 요청
 
 	document.querySelector('.list_cards').addEventListener('click', function(evt) {
-		if(evt.target.parentNode.classList.contains('booking_cancel')) {
+		if(evt.target.parentNode.matches('.booking_cancel')) {
 			var confirmResult = confirm("취소하시겠습니까?");
 			if(confirmResult == true){
 				let reservationInfoId = evt.target.closest('article').querySelector('#reservationInfoId').value;
@@ -45,7 +45,7 @@ function setSummaryBoardCountAfterCancel() {
 	let confirmedCount = Number(summaryList[1].querySelector('.figure').innerHTML);
 	let canceledCount = Number(summaryList[3].querySelector('.figure').innerHTML);
 
-	summaryList[1].querySelector('.figure').innerHTML = confirmedCount - 1;; 
+	summaryList[1].querySelector('.figure').innerHTML = confirmedCount - 1;
 	summaryList[3].querySelector('.figure').innerHTML = canceledCount + 1;
 }
 

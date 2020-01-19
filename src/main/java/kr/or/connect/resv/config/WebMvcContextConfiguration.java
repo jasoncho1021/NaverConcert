@@ -13,6 +13,7 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -30,11 +31,11 @@ import kr.or.connect.resv.interceptor.LogInterceptor;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = { "kr.or.connect.resv.controller", "kr.or.connect.resv.interceptor" })
+@ComponentScan(basePackages = { "kr.or.connect.resv.controller", "kr.or.connect.resv.interceptor", "kr.or.connect.resv.exception" })
 public class WebMvcContextConfiguration extends WebMvcConfigurerAdapter {
 	@Autowired
 	private EmailInterceptor emailInterceptor;
-	
+
 	@Autowired
 	private LogInterceptor logInterceptor;
 
@@ -57,6 +58,11 @@ public class WebMvcContextConfiguration extends WebMvcConfigurerAdapter {
 		resolver.setPrefix("/WEB-INF/views/");
 		resolver.setSuffix(".jsp");
 		return resolver;
+	}
+
+	@Override
+	public void addCorsMappings(CorsRegistry registry) {
+		registry.addMapping("/**");
 	}
 
 	@Override

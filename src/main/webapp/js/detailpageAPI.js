@@ -20,30 +20,30 @@ document.addEventListener("DOMContentLoaded", function() {
 	openBtn.addEventListener('click', function(evt) {
 		openBtn.style.display = 'none';
 		closeBtn.style.display = 'block';
-		document.querySelector('.store_details').classList.remove('close3');
+		removeClassName(document.querySelector('.store_details'), 'close3');
 	});
 
 	closeBtn.addEventListener('click', function(evt) {
 		closeBtn.style.display = 'none';
 		openBtn.style.display = 'block';
-		document.querySelector('.store_details').classList.add('close3');
+		addClassName(document.querySelector('.store_details'), 'close3');
 	});
 
 	var tabMenu = document.querySelector('.info_tab_lst');
 	tabMenu.addEventListener('click', function(evt) {
 		var el = evt.target.closest('.item');
 		var tabActive = document.querySelector('.info_tab_lst .item .active');
-		tabActive.classList.remove('active');
-		el.querySelector('a').classList.add('active');
+		removeClassName(tabActive, 'active');
+		addClassName(el.querySelector('a'), 'active');
 
 		var location = document.querySelector('.detail_location');
 		var detail = document.querySelector('.detail_area_wrap');
-		if (el.classList.contains('_detail')) {
-			detail.classList.remove('hide');
-			location.classList.add('hide');
-		} else if (el.classList.contains('_path')) {
-			location.classList.remove('hide');
-			detail.classList.add('hide');
+		if (el.matches('._detail')) { 
+			removeClassName(detail, 'hide');
+			addClassName(location, 'hide');
+		} else if (el.matches('._path')) { 
+			removeClassName(location, 'hide');
+			addClassName(detail, 'hide');
 		}
 	});
 
@@ -83,14 +83,14 @@ function makeProductImageCarousel(productImages, productDescription) {
 
 	var imageLength = productImages.length;
 
-	if(imageLength > 2) {
-		imageLength = 2;
+	if(imageLength > carouselObj.SETTING_NUMBER) {
+		imageLength = carouselObj.SETTING_NUMBER;
 	}
 
-	if (imageLength == 1) {
+	if (imageLength == carouselObj.SETTING_NUMBER - 1) {
 		productImageAdapter.imgUrl = productImages[0].fileInfoId;
 		innerHtml += bindTemplate(productImageAdapter);
-	} else if ( imageLength == 2 ) {
+	} else if ( imageLength == carouselObj.SETTING_NUMBER ) {
 		productImageAdapter.imgUrl = productImages[1].fileInfoId;
 		innerHtml += bindTemplate(productImageAdapter);
 		productImageAdapter.imgUrl = productImages[0].fileInfoId;
@@ -100,7 +100,7 @@ function makeProductImageCarousel(productImages, productDescription) {
 		productImageAdapter.imgUrl = productImages[0].fileInfoId;
 		innerHtml += bindTemplate(productImageAdapter);
 		carouselObj.twoImageFlag = true;
-	} else if ( imageLength > 2 ){
+	} else if ( imageLength > carouselObj.SETTING_NUMBER ){
 		productImageAdapter.imgUrl = productImages[imageLength-1].fileInfoId;
 		innerHtml += bindTemplate(productImageAdapter);
 		for(let i = 0; i < imageLength-1; i++) {

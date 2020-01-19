@@ -188,6 +188,7 @@
 </script>
 	<script src="/js/reservation.js"></script>
 	<script src="/js/repository.js"></script>
+	<script src="/js/classListAlter.js"></script>
 </body>
 
 </html>

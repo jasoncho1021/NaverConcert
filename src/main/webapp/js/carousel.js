@@ -6,6 +6,7 @@ var carouselObj = {
 	aniStart : 0,
 	aniTid : 0,
 	twoImageFlag: false,
+	SETTING_NUMBER : 2,
 
 	initCarousel(productImageList) {
 		this.productImageList = productImageList;

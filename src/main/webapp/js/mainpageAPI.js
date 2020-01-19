@@ -23,9 +23,10 @@ document.addEventListener("DOMContentLoaded", function() {
 	tabMenu.addEventListener('click', function(evt) {
 		var tabItem = evt.target.closest('.item');
 		if (tabItem != null) {
-			var tabActive = document.querySelector('.item .active');
-			tabActive.classList.remove('active');
-			tabItem.querySelector('a').classList.add('active');
+			let tabActive = document.querySelector('.item .active');
+			removeClassName(tabActive, 'active');
+			let selectedTabItem = tabItem.querySelector('a');
+			addClassName(selectedTabItem, 'active');
 
 			var eventBoxUl = document.querySelectorAll('.lst_event_box');
 			eventBoxUl[0].innerHTML = "";

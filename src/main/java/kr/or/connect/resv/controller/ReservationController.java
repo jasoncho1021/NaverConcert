@@ -43,6 +43,7 @@ public class ReservationController {
 
 	@PostMapping
 	public ReservationResponse makeReservation(@RequestBody ReservationParam reservationParam) {
+		System.out.println("날짜: " + reservationParam.getReservationYearMonthDay());
 		int reservationInfoId = reservationService.makeReservation(reservationParam);
 		return reservationService.makeReservationResponse(reservationInfoId);
 	}

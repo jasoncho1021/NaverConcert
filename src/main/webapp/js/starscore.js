@@ -1,12 +1,12 @@
-function Tab(tabElement) {
-	this.tabmenu = tabElement;
+function StarScore(tabElement) {
+	this.tabRating = tabElement;
 	this.checkboxArr = tabElement.querySelectorAll('input[type="checkbox"]');
 	this.registerEvents();
 }
 
-Tab.prototype = {
+StarScore.prototype = {
 	registerEvents : function() {
-		this.tabmenu.addEventListener("click", function(evt) {
+		this.tabRating.addEventListener("click", function(evt) {
 			if(evt.target.type == 'checkbox') {
 				console.log(evt.target.value);
 				this.setChecker( evt.target.value );
@@ -26,5 +26,5 @@ Tab.prototype = {
 	}
 }
 
-var tabmenu = document.querySelector(".rating");
-var o = new Tab(tabmenu);
+var tabRating = document.querySelector(".rating");
+var starScore = new StarScore(tabRating);
