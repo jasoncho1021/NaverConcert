@@ -60,10 +60,10 @@ public class WebMvcContextConfiguration extends WebMvcConfigurerAdapter {
 		return resolver;
 	}
 
-	@Override
+/*	@Override
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**");
-	}
+	}*/
 
 	@Override
 	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {

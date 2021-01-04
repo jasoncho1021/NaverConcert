@@ -34,6 +34,16 @@ public class ReservationController {
 		return reservationDate;
 	}
 
+/*	@GetMapping
+	public String getReservationDate() {
+		Random random = new Random();
+		int randomScope = random.nextInt(5);
+		LocalDateTime reservationDate = LocalDateTime.now().plusDays(randomScope);
+		String dateString = reservationDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"));
+		String jsonStr = "\"" + dateString + "\""; 
+		return jsonStr;
+	}*/
+
 	@GetMapping(params = "reservationEmail")
 	public ReservationInfoResponse getReservations(
 			@RequestParam(value = "reservationEmail", required = true) String reservationEmail) {

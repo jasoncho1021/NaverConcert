@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.TransactionManagementConfigure
 @Configuration
 @PropertySource("classpath:application.properties")
 @EnableTransactionManagement
-public class DBConfig implements TransactionManagementConfigurer{
+public class DBConfig implements TransactionManagementConfigurer {
 	@Value("${spring.datasource.url}")
 	private String url;
 
@@ -37,12 +37,12 @@ public class DBConfig implements TransactionManagementConfigurer{
 		dataSource.setPassword(password);
 		return dataSource;
 	}
-	
+
 	@Override
 	public PlatformTransactionManager annotationDrivenTransactionManager() {
 		return transactionManager();
 	}
-	
+
 	@Bean
 	public PlatformTransactionManager transactionManager() {
 		return new DataSourceTransactionManager(dataSource());
