@@ -20,7 +20,7 @@ public class ViewController {
 
 	@GetMapping(path = "/")
 	public String getMain(HttpSession session) {
-		session.invalidate();
+		session.removeAttribute(ATTRIBUTE_NAME);
 		return "forward:/mainpage";
 	}
 
