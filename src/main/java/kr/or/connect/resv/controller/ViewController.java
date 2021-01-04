@@ -19,7 +19,8 @@ public class ViewController {
 	private ReservationService reservationService;
 
 	@GetMapping(path = "/")
-	public String getMain() {
+	public String getMain(HttpSession session) {
+		session.invalidate();
 		return "forward:/mainpage";
 	}
 
