@@ -29,10 +29,10 @@
 
 <c:choose>
     <c:when test = "${not empty reservationEmail}">
-		<a href="login" class="btn_my"> <span class="viewReservation" title="${reservationEmail}">${reservationEmail}</span></a>
+		<a href="myreservation" class="btn_my"> <span class="viewReservation" title="${reservationEmail}">${reservationEmail}</span></a>
     </c:when>
     <c:when test = "${empty reservationEmail}">
-        <a href="login" class="btn_my"> <span class="viewReservation" title="예약확인">예약확인</span></a>
+        <a href="bookinglogin" class="btn_my"> <span class="viewReservation" title="예약확인">예약확인</span></a>
     </c:when>
 </c:choose>
 				<input type="hidden" id="reservationEmail" name="reservationEmail" value="${reservationEmail}">
