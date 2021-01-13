@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import kr.or.connect.resv.util.Keywords;
+
 @Component
 public class LogInterceptor extends HandlerInterceptorAdapter {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -18,12 +20,16 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		logger.debug("{} 를 호출했습니다.", handler.toString());
-		logger.debug("클라이언트 IP {}", request.getRemoteAddr());
-		logger.debug("요청 URL {}", request.getRequestURL());
-		logger.debug("요청 URI {}", request.getRequestURI());
-		logger.debug("요청 시간 {}", LocalDateTime.now());
+		logger.debug("=> {} 를 호출했습니다.", handler.toString());
+		logger.debug("=> 클라이언트 IP {}", request.getRemoteAddr());
+		logger.debug("=> 요청 URL {}", request.getRequestURL());
+		logger.debug("=> 요청 URI {}", request.getRequestURI());
+		logger.debug("=> 요청 시간 {}", LocalDateTime.now());
 
+		String reservationEmail = (String) request.getSession().getAttribute(Keywords.ATTRIBUTE_NAME);
+		logger.debug("==>" + reservationEmail);
+
+		logger.debug("                       ");
 		return true;
 	}
 
@@ -31,9 +37,14 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
 		if (modelAndView != null) {
-			logger.debug("종료 {} 가종료되었습니다. {} 를 view로 사용합니다.", handler.toString(), modelAndView.getViewName());
+			logger.debug("=> 종료 {} 가종료되었습니다. {} 를 view로 사용합니다.", handler.toString(), modelAndView.getViewName());
 		} else {
-			logger.debug("종료 {} 가종료되었습니다. ", handler.toString());
+			logger.debug("=> 종료 {} 가종료되었습니다. ", handler.toString());
 		}
+
+		String reservationEmail = (String) request.getSession().getAttribute(Keywords.ATTRIBUTE_NAME);
+		logger.debug("==>" + reservationEmail);
+
+		logger.debug("                       ");
 	}
 }

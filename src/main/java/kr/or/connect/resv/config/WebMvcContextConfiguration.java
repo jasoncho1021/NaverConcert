@@ -41,13 +41,13 @@ public class WebMvcContextConfiguration extends WebMvcConfigurerAdapter {
 	private AuthenticationInterceptor authenticationInterceptor;
 
 	@Autowired
-	private SignInInterceptor signInInterceptor;
-
-	@Autowired
 	private EmailInterceptor emailInterceptor;
 
 	@Autowired
 	private LogInterceptor logInterceptor;
+
+	@Autowired
+	private SignInInterceptor signInInterceptor;
 
 	@Override
 	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
@@ -98,9 +98,14 @@ public class WebMvcContextConfiguration extends WebMvcConfigurerAdapter {
 							.addPathPatterns("/myreservation");
 		interceptorRegistry.addInterceptor(emailInterceptor)
 							.addPathPatterns("/mainpage")
+							.addPathPatterns("/detail");
+							//.addPathPatterns("/myreservation");
+		interceptorRegistry.addInterceptor(logInterceptor)
+							.addPathPatterns("/")
+							.addPathPatterns("/mainpage")
+							.addPathPatterns("/myreservation")
 							.addPathPatterns("/detail")
-							.addPathPatterns("/myreservation");
-		interceptorRegistry.addInterceptor(logInterceptor);
+							.addPathPatterns("/login");
 		interceptorRegistry.addInterceptor(signInInterceptor)
 							.addPathPatterns("/login");
 	}
