@@ -29,12 +29,11 @@ public class SignInInterceptor extends HandlerInterceptorAdapter {
 		logger.debug("==>" + modelMap.get(Keywords.ATTRIBUTE_NAME));
 
 		if (userVO != null) {
-			//session.setAttribute(Keywords.ATTRIBUTE_NAME, modelMap.get(Keywords.ATTRIBUTE_NAME));
+			session.setAttribute(Keywords.ATTRIBUTE_NAME, modelMap.get(Keywords.ATTRIBUTE_NAME));
 		} else {
 			response.sendRedirect("bookinglogin");
 		}
 
-		//super.postHandle(request, response, handler, modelAndView);
 	}
 
 }
