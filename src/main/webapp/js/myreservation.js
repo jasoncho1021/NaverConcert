@@ -18,7 +18,8 @@ var serverTodayDate;
 
 function compareTime(response) {
 	serverTodayDate = new Date(response);
-	var url = '/api/reservations?reservationEmail='+ document.querySelector('#reservationEmail').value;
+	var reservationEmail = document.querySelector('#reservationEmail').value;
+	var url = '/api/reservations?reservationEmail='+ reservationEmail;
 	requestAjax.getData(url, makeReservationResult);
 }
 

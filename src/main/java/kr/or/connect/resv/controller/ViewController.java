@@ -9,18 +9,19 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import kr.or.connect.resv.dto.ReservationInfoResponse;
 import kr.or.connect.resv.service.ReservationService;
+import kr.or.connect.resv.util.Keywords;
 
 @Controller
 public class ViewController {
-	private static final String ATTRIBUTE_NAME = "RESERVATION_EMAIL";
 
 	@Autowired
 	private ReservationService reservationService;
 
 	@GetMapping(path = "/")
-	public String getMain(HttpSession session) {
-		session.removeAttribute(ATTRIBUTE_NAME);
+	public String getRootPage(HttpSession session) {
+		session.removeAttribute(Keywords.ATTRIBUTE_NAME);
 		return "forward:/mainpage";
 	}
 
@@ -30,7 +31,7 @@ public class ViewController {
 	}
 
 	@GetMapping(path = "/detail")
-	public String getDetailPage() {
+	public String getDetailPage(@RequestParam(name = "id", required = true) String id) {
 		return "detail";
 	}
 
@@ -49,6 +50,11 @@ public class ViewController {
 		return "bookinglogin";
 	}
 
+	@GetMapping(path = "/myreservation")
+	public String getMyReservationPage() {
+		return "myreservation";
+	}
+
 	@GetMapping(path = "/reviewWrite")
 	public String getReviewWritePage(HttpServletRequest request, ModelMap model) {
 		model.addAttribute("productId", request.getParameter("productId"));
@@ -59,24 +65,16 @@ public class ViewController {
 	}
 
 	@GetMapping(path = "/login")
-	public String login(@RequestParam(name = "reservationEmail", required = false) String reservationEmail,
+	public String login(@RequestParam(name = Keywords.ATTRIBUTE_NAME, required = true) String reservationEmail,
 			HttpSession session, ModelMap model) {
 
-		String sessionReservationEmail = (String) session.getAttribute(ATTRIBUTE_NAME);
-		if (sessionReservationEmail != null) {
-			return "myreservation";
+		ReservationInfoResponse reservationInfoResponse = reservationService.getReservations(reservationEmail);
+		if (reservationInfoResponse.getSize() > 0) {
+			model.addAttribute("userVO", reservationInfoResponse);
+			model.addAttribute(Keywords.ATTRIBUTE_NAME, reservationEmail);
 		}
 
-		if (reservationEmail == null) {
-			return "redirect:/bookinglogin";
-		}
-
-		if (reservationService.getReservations(reservationEmail).getSize() > 0) {
-			session.setAttribute(ATTRIBUTE_NAME, reservationEmail);
-			return "myreservation";
-		}
-
-		return "redirect:/bookinglogin";
+		return "myreservation";
 	}
 
 }
