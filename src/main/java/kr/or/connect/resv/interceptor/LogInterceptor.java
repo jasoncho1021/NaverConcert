@@ -26,8 +26,8 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
 		logger.debug("=> 요청 URI {}", request.getRequestURI());
 		logger.debug("=> 요청 시간 {}", LocalDateTime.now());
 
-		String reservationEmail = (String) request.getSession().getAttribute(Keywords.ATTRIBUTE_NAME);
-		logger.debug("==>" + reservationEmail);
+		String reservationEmail = (String) request.getSession().getAttribute(Keywords.AUTHENTICATION_KEY);
+		logger.debug("=> reservationEmail: " + reservationEmail);
 
 		logger.debug("                       ");
 		return true;
@@ -37,13 +37,15 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
 		if (modelAndView != null) {
-			logger.debug("=> 종료 {} 가종료되었습니다. {} 를 view로 사용합니다.", handler.toString(), modelAndView.getViewName());
+			logger.debug("==> 종료 {} 가종료되었습니다. {} 를 view로 사용합니다.", handler.toString(), modelAndView.getViewName());
 		} else {
-			logger.debug("=> 종료 {} 가종료되었습니다. ", handler.toString());
+			logger.debug("==> 종료 {} 가종료되었습니다. ", handler.toString());
 		}
 
-		String reservationEmail = (String) request.getSession().getAttribute(Keywords.ATTRIBUTE_NAME);
-		logger.debug("==>" + reservationEmail);
+		String reservationEmail = (String) request.getSession().getAttribute(Keywords.AUTHENTICATION_KEY);
+		logger.debug("==> " + reservationEmail);
+		Object userData = request.getSession().getAttribute(Keywords.USER_DATA);
+		logger.debug("==> " + userData);
 
 		logger.debug("                       ");
 	}

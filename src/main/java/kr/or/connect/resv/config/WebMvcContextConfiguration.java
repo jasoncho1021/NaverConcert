@@ -96,16 +96,8 @@ public class WebMvcContextConfiguration extends WebMvcConfigurerAdapter {
 	public void addInterceptors(InterceptorRegistry interceptorRegistry) {
 		interceptorRegistry.addInterceptor(authenticationInterceptor)
 							.addPathPatterns("/myreservation");
-		interceptorRegistry.addInterceptor(emailInterceptor)
-							.addPathPatterns("/mainpage")
-							.addPathPatterns("/detail")
-							.addPathPatterns("/myreservation");
 		interceptorRegistry.addInterceptor(logInterceptor)
-							.addPathPatterns("/")
-							.addPathPatterns("/mainpage")
-							.addPathPatterns("/myreservation")
-							.addPathPatterns("/detail")
-							.addPathPatterns("/login");
+							.addPathPatterns("/*");
 		interceptorRegistry.addInterceptor(signInInterceptor)
 							.addPathPatterns("/login");
 	}

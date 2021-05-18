@@ -19,14 +19,14 @@ public class EmailInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
-		String reservationEmail = (String) request.getSession().getAttribute(Keywords.ATTRIBUTE_NAME);
+		String reservationEmail = (String) request.getSession().getAttribute(Keywords.AUTHENTICATION_KEY);
 
-		logger.debug("==> AFTER");
-		logger.debug("==> 요청 URL {}", request.getRequestURL());
-		logger.debug("==>" + reservationEmail);
+		logger.debug("--> AFTER");
+		logger.debug("--> 요청 URL {}", request.getRequestURL());
+		logger.debug("--> " + reservationEmail);
 
 		if (reservationEmail != null) {
-			modelAndView.addObject(Keywords.ATTRIBUTE_NAME, reservationEmail);
+			modelAndView.addObject(Keywords.AUTHENTICATION_KEY, reservationEmail);
 		}
 	}
 }
