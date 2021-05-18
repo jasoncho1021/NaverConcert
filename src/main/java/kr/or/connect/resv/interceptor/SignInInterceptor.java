@@ -24,12 +24,13 @@ public class SignInInterceptor extends HandlerInterceptorAdapter {
 
 		HttpSession session = request.getSession();
 		ModelMap modelMap = modelAndView.getModelMap();
-		Object userVO = modelMap.get("userVO");
+		Object userVO = modelMap.get(Keywords.USER_DATA);
 
-		logger.debug("==>" + modelMap.get(Keywords.ATTRIBUTE_NAME));
+		logger.debug("--> " + modelMap.get(Keywords.AUTHENTICATION_KEY));
 
 		if (userVO != null) {
-			session.setAttribute(Keywords.ATTRIBUTE_NAME, modelMap.get(Keywords.ATTRIBUTE_NAME));
+			session.setAttribute(Keywords.AUTHENTICATION_KEY, modelMap.get(Keywords.AUTHENTICATION_KEY));
+			session.setAttribute(Keywords.USER_DATA, userVO);
 		} else {
 			response.sendRedirect("bookinglogin");
 		}

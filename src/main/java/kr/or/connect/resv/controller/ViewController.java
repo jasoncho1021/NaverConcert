@@ -21,7 +21,7 @@ public class ViewController {
 
 	@GetMapping(path = "/")
 	public String getRootPage(HttpSession session) {
-		session.removeAttribute(Keywords.ATTRIBUTE_NAME);
+		session.removeAttribute(Keywords.AUTHENTICATION_KEY);
 		return "forward:/mainpage";
 	}
 
@@ -65,13 +65,13 @@ public class ViewController {
 	}
 
 	@GetMapping(path = "/login")
-	public String login(@RequestParam(name = Keywords.ATTRIBUTE_NAME, required = true) String reservationEmail,
+	public String login(@RequestParam(name = Keywords.AUTHENTICATION_KEY, required = true) String reservationEmail,
 			HttpSession session, ModelMap model) {
 
 		ReservationInfoResponse reservationInfoResponse = reservationService.getReservations(reservationEmail);
 		if (reservationInfoResponse.getSize() > 0) {
-			model.addAttribute("userVO", reservationInfoResponse);
-			model.addAttribute(Keywords.ATTRIBUTE_NAME, reservationEmail);
+			model.addAttribute(Keywords.USER_DATA, reservationInfoResponse);
+			model.addAttribute(Keywords.AUTHENTICATION_KEY, reservationEmail);
 		}
 
 		return "myreservation";
