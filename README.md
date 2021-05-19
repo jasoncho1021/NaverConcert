@@ -14,8 +14,8 @@ https://docs.google.com/presentation/d/1i2IC1yIH5ACFCvCH4EMVv_3Zw2oltRvHK94amyNE
 * CSR(Client Side Rendering) 방식 활용
 * Session 변수와 Interceptor 를 사용하여 로그인 상태 유지 및 페이지 접근 권한 검증 구현
 
-# 추가학습내용
-https://github.com/jasoncho1021/BoostCourseWeb/wiki
+# 추가학습내용 
+https://github.com/jasoncho1021/NaverConcert/wiki
 
 # Swagger
 http://49.236.147.192:9090/swagger-ui.html#/
