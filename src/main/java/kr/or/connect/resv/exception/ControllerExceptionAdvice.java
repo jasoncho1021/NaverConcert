@@ -3,6 +3,7 @@ package kr.or.connect.resv.exception;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -19,10 +20,17 @@ public class ControllerExceptionAdvice {
 		return "/user/login";
 	}
 
+	/*	@ExceptionHandler(MissingServletRequestParameterException.class)
+		public String handleMissingParams(MissingServletRequestParameterException ex) {
+			String name = ex.getParameterName();
+			log.debug(name + " parameter is missing");
+			return "mainpage";
+		}*/
+
 	@ExceptionHandler(MissingServletRequestParameterException.class)
-	public String handleMissingParams(MissingServletRequestParameterException ex) {
+	public ResponseEntity<String> handleMissingParams(MissingServletRequestParameterException ex) {
 		String name = ex.getParameterName();
 		log.debug(name + " parameter is missing");
-		return "mainpage";
+		return new ResponseEntity<>(name + " parameter is missing", HttpStatus.BAD_REQUEST);
 	}
 }

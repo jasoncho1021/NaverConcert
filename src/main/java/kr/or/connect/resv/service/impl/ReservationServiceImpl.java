@@ -1,5 +1,8 @@
 package kr.or.connect.resv.service.impl;
-
+/**
+ * https://www.boostcourse.org/web316/project/11/content/9#review/4723/code
+ * 
+ */
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +30,8 @@ public class ReservationServiceImpl implements ReservationService {
 	@Transactional(readOnly = true)
 	public ReservationInfoResponse getReservations(String reservationEmail) {
 		ReservationInfoResponse reservationInfoResponse = new ReservationInfoResponse();
+		// 반복 dao 호출 --> DB connection 네크워크 리소스 낭비
+		// List로 따로 받지 말고 쿼리에 JOIN 넣어 결과까지 한 번에 가져오게 수정해보자. 아래에서 for문 안 돌게끔. 
 		List<ReservationInfo> reservations = reservationDao.selectReservationInfoByReservationEmail(reservationEmail);
 
 		for (ReservationInfo reservationInfo : reservations) {

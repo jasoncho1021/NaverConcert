@@ -22,6 +22,14 @@ public class SignInInterceptor extends HandlerInterceptorAdapter {
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
 
+		/*		Cookie userCookie = WebUtils.getCookie(request, Keywords.COOKIE);
+				String sessionId = "";
+				if (userCookie != null) {
+					sessionId = userCookie.getValue();
+				}
+		
+				logger.debug("--> sessionId: " + sessionId);*/
+
 		HttpSession session = request.getSession();
 		ModelMap modelMap = modelAndView.getModelMap();
 		Object userVO = modelMap.get(Keywords.USER_DATA);
@@ -31,6 +39,11 @@ public class SignInInterceptor extends HandlerInterceptorAdapter {
 		if (userVO != null) {
 			session.setAttribute(Keywords.AUTHENTICATION_KEY, modelMap.get(Keywords.AUTHENTICATION_KEY));
 			session.setAttribute(Keywords.USER_DATA, userVO);
+
+/*			Cookie cookie = new Cookie(Keywords.COOKIE, session.getId());
+			cookie.setPath("/");
+			cookie.setMaxAge(60 * 60 * 24 * 7);
+			response.addCookie(cookie);*/
 		} else {
 			response.sendRedirect("bookinglogin");
 		}

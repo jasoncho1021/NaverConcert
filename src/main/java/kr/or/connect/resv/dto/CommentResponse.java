@@ -19,6 +19,13 @@ public class CommentResponse {
 	private Integer score;
 	private CommentImage commentImage;
 
+	@Override
+	public String toString() {
+		return "CommentResponse [comment=" + comment + ", commentId=" + commentId + ", createDate=" + createDate
+				+ ", modifyDate=" + modifyDate + ", productId=" + productId + ", reservationInfoId=" + reservationInfoId
+				+ ", score=" + score + ", commentImage=" + commentImage + "]";
+	}
+
 	public String getComment() {
 		return comment;
 	}
