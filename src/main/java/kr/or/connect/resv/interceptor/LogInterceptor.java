@@ -2,6 +2,7 @@ package kr.or.connect.resv.interceptor;
 
 import java.time.LocalDateTime;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -10,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import org.springframework.web.util.WebUtils;
 
 import kr.or.connect.resv.util.Keywords;
 
@@ -28,6 +30,17 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
 
 		String reservationEmail = (String) request.getSession().getAttribute(Keywords.AUTHENTICATION_KEY);
 		logger.debug("=> reservationEmail: " + reservationEmail);
+
+		String sessionId = request.getSession().getId();
+
+		Cookie userCookie = WebUtils.getCookie(request, "JSESSIONID");
+		if (userCookie != null) {
+			logger.debug("--> JSessionId: " + userCookie.getValue());
+		} else {
+			logger.debug("--> JSessionId: null");
+		}
+
+		logger.debug("--> sessionId: " + sessionId);
 
 		logger.debug("                       ");
 		return true;
