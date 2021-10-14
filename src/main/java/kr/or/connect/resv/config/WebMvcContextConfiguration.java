@@ -27,7 +27,6 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 import kr.or.connect.resv.interceptor.AuthenticationInterceptor;
-import kr.or.connect.resv.interceptor.EmailInterceptor;
 import kr.or.connect.resv.interceptor.LogInterceptor;
 import kr.or.connect.resv.interceptor.SignInInterceptor;
 
@@ -40,8 +39,8 @@ public class WebMvcContextConfiguration extends WebMvcConfigurerAdapter {
 	@Autowired
 	private AuthenticationInterceptor authenticationInterceptor;
 
-	@Autowired
-	private EmailInterceptor emailInterceptor;
+	//@Autowired
+	//private EmailInterceptor emailInterceptor;
 
 	@Autowired
 	private LogInterceptor logInterceptor;
