@@ -124,6 +124,7 @@ function makeLocationInfo(response) {
 	document.querySelector('.store_addr_bold').innerHTML = response.displayInfo.placeLot;
 	document.querySelector('.addr_old_detail').innerHTML = response.displayInfo.placeStreet;
 	document.querySelector('.addr_detail').innerHTML = response.displayInfo.placeName;
+	document.querySelector('.store_map').src = 'images/' + response.displayInfoImage.fileId;
 
 	var tel = document.querySelector('.store_tel');
 	tel.setAttribute('href', response.displayInfo.telephone);
