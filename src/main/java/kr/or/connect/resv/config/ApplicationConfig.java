@@ -6,6 +6,6 @@ import org.springframework.context.annotation.Import;
 
 @Configuration
 @ComponentScan(basePackages = {"kr.or.connect.resv.dao", "kr.or.connect.resv.service"})
-@Import({ DBConfig.class})
+@Import({ DBConfig.class, SecurityConfig.class})
 public class ApplicationConfig {
 }

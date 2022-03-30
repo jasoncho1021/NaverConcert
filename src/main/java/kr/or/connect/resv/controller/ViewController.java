@@ -30,6 +30,21 @@ public class ViewController {
 		return "mainpage";
 	}
 
+	@GetMapping(path = "/manager")
+	public String getManagerPage() {
+		return "manager/manager";
+	}
+
+	@GetMapping(path = "/uploadDetail")
+	public String getUploadDetail() {
+		return "manager/uploadDetail";
+	}
+
+	@GetMapping(path = "/uploadReserve")
+	public String getUploadReserve() {
+		return "manager/uploadReserve";
+	}
+
 	@GetMapping(path = "/detail")
 	public String getDetailPage(@RequestParam(name = "id", required = true) String id) {
 		return "detail";
@@ -64,7 +79,7 @@ public class ViewController {
 		return "reviewWrite";
 	}
 
-	@GetMapping(path = "/login")
+	@GetMapping(path = "/userlogin")
 	public String login(@RequestParam(name = Keywords.AUTHENTICATION_KEY, required = true) String reservationEmail,
 			HttpSession session, ModelMap model) {
 

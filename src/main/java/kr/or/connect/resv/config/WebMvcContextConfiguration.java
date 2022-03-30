@@ -98,7 +98,7 @@ public class WebMvcContextConfiguration extends WebMvcConfigurerAdapter {
 		interceptorRegistry.addInterceptor(logInterceptor)
 							.addPathPatterns("/*");
 		interceptorRegistry.addInterceptor(signInInterceptor)
-							.addPathPatterns("/login");
+							.addPathPatterns("/userlogin");
 	}
 
 	@Bean
