@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	var tabMenu = document.querySelector('.info_tab_lst');
 	tabMenu.addEventListener('click', function (evt) {
+
 		var el = evt.target.closest('.item');
 		var tabActive = document.querySelector('.info_tab_lst .item .active');
 		removeClassName(tabActive, 'active');

@@ -33,8 +33,8 @@ import kr.or.connect.resv.interceptor.SignInInterceptor;
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = { "kr.or.connect.resv.controller", "kr.or.connect.resv.interceptor",
-		"kr.or.connect.resv.exception" })
-public class WebMvcContextConfiguration extends WebMvcConfigurerAdapter {
+		"kr.or.connect.resv.exception", "kr.or.connect.resv.manager.controller" })
+public class WebMvcContextConfiguration extends WebMvcConfigurerAdapter{
 
 	@Autowired
 	private AuthenticationInterceptor authenticationInterceptor;
@@ -93,12 +93,9 @@ public class WebMvcContextConfiguration extends WebMvcConfigurerAdapter {
 
 	@Override
 	public void addInterceptors(InterceptorRegistry interceptorRegistry) {
-		interceptorRegistry.addInterceptor(authenticationInterceptor)
-							.addPathPatterns("/myreservation");
-		interceptorRegistry.addInterceptor(logInterceptor)
-							.addPathPatterns("/*");
-		interceptorRegistry.addInterceptor(signInInterceptor)
-							.addPathPatterns("/userlogin");
+		interceptorRegistry.addInterceptor(authenticationInterceptor).addPathPatterns("/myreservation");
+		interceptorRegistry.addInterceptor(logInterceptor).addPathPatterns("/*");
+		interceptorRegistry.addInterceptor(signInInterceptor).addPathPatterns("/userlogin");
 	}
 
 	@Bean

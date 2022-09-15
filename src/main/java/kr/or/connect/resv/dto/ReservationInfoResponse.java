@@ -6,11 +6,6 @@ import kr.or.connect.resv.dto.model.ReservationInfo;
 
 public class ReservationInfoResponse {
 
-	@Override
-	public String toString() {
-		return "ReservationInfoResponse [reservations=" + reservations.size() + ", size=" + size + "]";
-	}
-
 	private List<ReservationInfo> reservations;
 	private int size;
 
@@ -28,6 +23,11 @@ public class ReservationInfoResponse {
 
 	public void setSize(int size) {
 		this.size = size;
+	}
+
+	@Override
+	public String toString() {
+		return "ReservationInfoResponse [reservations=" + reservations + ", size=" + size + "]";
 	}
 
 }

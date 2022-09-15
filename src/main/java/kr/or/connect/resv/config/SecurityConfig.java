@@ -23,6 +23,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		log.info("security config...................");
 
+		http.csrf().disable();
+
 		http.authorizeRequests().antMatchers("/manager/**").hasRole("MANAGER").and().formLogin();
 
 		http.userDetailsService(resvUserService);
@@ -35,7 +37,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		log.info("build Auth global.........");
 
 		auth.userDetailsService(resvUserService).passwordEncoder(passwordEncoder());
-
 	}
 
 	@Bean

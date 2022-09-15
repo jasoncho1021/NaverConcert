@@ -37,9 +37,29 @@
 <body>
 
 	<main>
+		<div>썸네일 추가</div>
+		<form method="post" name="fileinfo" enctype="multipart/form-data">
+			<input type="file" class="hidden_input" id="thumbNailByAdmin" name="attachedImage"
+				onclick="this.value=null;">
+		</form>
+
+		<ul class="only_thumb" style="list-style-type: none;">
+			<!--
+		<li class="item">
+			<div class="img-wrap">
+				<span class="close">&times;</span>
+					<img
+					src="http://images.freeimages.com/images/premium/previews/2282/2282459-fisheye-tank.jpg"
+					width="200" data-id="123">
+			</div>
+		</li>
+		-->
+		</ul>
+
+
 		<div>사진 추가</div>
 		<form method="post" name="fileinfo" enctype="multipart/form-data">
-			<input type="file" class="hidden_input" id="reviewImageFileOpenInput" name="attachedImage"
+			<input type="file" class="hidden_input" id="productImageByAdmin" name="attachedImage"
 				onclick="this.value=null;">
 		</form>
 
@@ -57,18 +77,70 @@
 		</ul>
 
 		<div>사진 타이틀</div>
-		<input id="imgTitle" type="text" onInput="edValueKeyPress(this)" value="타이틀">
+		<input id="description" type="text" onInput="edValueKeyPress(this)" value="타이틀">
 
 		<div>소개 내용</div>
-		<textarea id="productContent" onInput="edValueKeyPress(this)"></textarea>
+		<textarea id="content" onInput="edValueKeyPress(this)"></textarea>
 
 		<div>이벤트 내용</div>
-		<textarea id="eventContent" onInput="edValueKeyPress(this)"></textarea>
+		<textarea id="event" onInput="edValueKeyPress(this)"></textarea>
 
-		<div class="search" style=""></div>
+		<div class="search">지도이미지</div>
 		<input id="address" type="text" placeholder="검색할 주소" value="불정로 6" />
 		<input id="submit" type="button" value="주소 검색" />
+
+		<canvas id="canvas" hidden></canvas>
+		<img class="store_map img_thumb" alt="map" id="managermap" crossorigin="anonymous"
+			src="https://naveropenapi.apigw.ntruss.com/map-static/v2/raster-cors?w=300&h=300&center=127.084338,37.5061&level=16&X-NCP-APIGW-API-KEY-ID=688kianals"
+			style="display: none;">
+
+		<div>openingHours</div>
+		<textarea id="openingHours" onInput="edValueKeyPress(this)"></textarea>
+		<div>placeName</div>
+		<textarea id="placeName" onInput="edValueKeyPress(this)"></textarea>
+		<div>placeLot</div>
+		<textarea id="placeLot" onInput="edValueKeyPress(this)"></textarea>
+		<div>placeStreet</div>
+		<textarea id="placeStreet" onInput="edValueKeyPress(this)"></textarea>
+		<div>tel</div>
+		<textarea id="tel" onInput="edValueKeyPress(this)"></textarea>
+		<div>homepage</div>
+		<textarea id="homepage" onInput="edValueKeyPress(this)"></textarea>
+		<div>email</div>
+		<textarea id="email" onInput="edValueKeyPress(this)"></textarea>
+
+		<div>카테고리</div>
+		<select id="categoryId">
+			<option value="1">전시</option>
+			<option value="2">뮤지컬</option>
+			<option value="3">콘서트</option>
+			<option value="4">클래식</option>
+			<option value="5">연극</option>
+		</select>
+		<!--
+		'성인(A), 청소년(Y), 유아(B), 셋트(S), 장애인(D), 지역주민(C), 어얼리버드(E) 
+		기타 다른 유형이 있다면 위와 겹치지 않게 1자로 정의하여 기입,
+		VIP(V), R석(R), B석(B), S석(S), 평일(D)',
+		-->
+
+		<div>가격</div>
+		<select name="priceTypeName" id="priceTypeName">
+			<option value="A">성인(A)</option>
+			<option value="Y">청소년(Y)</option>
+			<option value="B">유아(B)</option>
+			<option value="S">세트(S)</option>
+			<option value="D">장애인(D)</option>
+			<option value="C">지역주민(C)</option>
+			<option value="E">얼리버드(E)</option>
+		</select>
+		가격:<input type='text' id='price' />
+		할인율:<input type='text' id='discountRate' />
+		<div>
+			<input type='button' value='추가' onclick='addList()' />
 		</div>
+
+		<ul id='prices'>
+		</ul>
 
 		<div>
 			<button id="sender">
@@ -82,6 +154,7 @@
 			frameborder="0"> </iframe>
 	</section>
 </body>
+
 <script id="nmap" type="text/javascript"
 	src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=688kianals&submodules=geocoder">
 </script>
@@ -97,294 +170,48 @@
 
 <script src="/js/manager/handlebars.min.js"></script>
 <script src="/js/manager/productInfo.js"></script>
+<script src="/js/manager/editor.js"></script>
+<script src="/js/manager/map.js"></script>
 
 <script>
-	var spoint = null;
-
-	function searchAddressToCoordinate(address) {
-		naver.maps.Service.geocode({
-			query: address
-		}, function (status, response) {
-			if (status === naver.maps.Service.Status.ERROR) {
-				return alert('Something Wrong!');
-			}
-
-			if (response.v2.meta.totalCount === 0) {
-				return alert('totalCount' + response.v2.meta.totalCount);
-			}
-
-			var htmlAddresses = [],
-				item = response.v2.addresses[0];
-
-			spoint = new naver.maps.Point(item.x, item.y);
-
-			if (item.roadAddress) {
-				htmlAddresses.push('[도로명 주소] ' + item.roadAddress);
-			}
-
-			if (item.jibunAddress) {
-				htmlAddresses.push('[지번 주소] ' + item.jibunAddress);
-			}
-
-			if (item.englishAddress) {
-				htmlAddresses.push('[영문명 주소] ' + item.englishAddress);
-			}
-
-			console.log(item.x, item.y);
-
-			if (iframeContentWindow.map != null)
-				iframeContentWindow.map.setCenter(spoint);
-		});
-	}
-
-	function initGeocoder() {
-		document.querySelector('#address').addEventListener('keydown', function (e) {
-			var keyCode = e.which;
-
-			if (keyCode === 13) { // Enter Key
-				searchAddressToCoordinate(document.querySelector('#address').value);
-			}
-		});
-
-		document.querySelector('#submit').addEventListener('click', function (e) {
-			e.preventDefault();
-
-			searchAddressToCoordinate(document.querySelector('#address').value);
-		});
-
-		//searchAddressToCoordinate('정자동 178-1');
-	}
-
-	var iframeContentWindow;
-	var iframeDoc;
-
-	var storedFiles = new Map(); //store the object of the all files
-
-	document.addEventListener("DOMContentLoaded", function () {
-		console.log("DOM ContentLoaded");
-
-		var iframe = document.getElementById("outputiframe");
-		iframe.contentWindow.addEventListener("DOMContentLoaded", onFrameDOMContentLoaded, false);
-		iframe.addEventListener("load", siteLoaded, false);
-	});
-
-	function onFrameDOMContentLoaded() {
-		console.log(">> iframe DOMContentLoaded");
-		initThumbNailChangeListener();
-		initDeleteImgListener();
-		initSubmit();
-		initGeocoder();
-	};
-
-
-	function initSubmit() {
-		document.querySelector('#sender').addEventListener('click', (e) => {
-			var formData = new FormData();
-
-
-			for (const key of Object.keys(productInfo)) {
-				if (key === 'productImages') {
-					for (let value of storedFiles.values()) {
-						//productInfo[key].push(value);
-						productInfo.mapImage = value;
-						formData.append(key, value);
-					}
-					continue;
-				}
-				formData.append(key, productInfo[key]);
-			}
-
-			//for (const key of Object.keys(productInfo))
-			//	console.log(key, formData.get(key));
-
-
-			//for (let value of storedFiles.values()) {
-			//	formData.append('files', value);
-			//}
-
-			//var comment = document.querySelector('#productContent').value;
-			//formData.append('comment', comment);
-
-
-
-			xhr = new XMLHttpRequest();
-			xhr.open('POST', '/upload', true);
-
-			//xhr.setRequestHeader('Content-type', 'multipart/form-data');
-
-			xhr.onload = function (response) {
-				if (xhr.status == 200) {
-					console.log("success:" + response);
-				} else {
-					console.log("failed:" + response);
-				}
-			};
-
-			xhr.send(formData);
-
-			return false;
-		});
-	}
-
-	function siteLoaded(evt) {
-		console.log("iframe content loaded");
-		var url = evt.currentTarget.contentWindow.location.pathname;
-
-		iframeContentWindow = document.getElementById('outputiframe').contentWindow;
-		iframeDoc = iframeContentWindow.document;
-
-		if (url.includes('detail')) {
-			reloadDetail();
-		} else if (url.includes('reserve')) {
-
-		}
-	}
-
-	function makeMapImg() {
-		var canvas = document.getElementById("canvas");
-		var ctx = canvas.getContext("2d");
-		ctx.drawImage(document.getElementById('smap'), 0, 0); // <img 
-
-		/*
-		var image = canvas.toDataURL("image/png").replace("image/png",
-			"image/octet-stream"
-		); // here is the most important part because if you dont replace you will get a DOM 18 exception.
-		window.location.href = image; // it will save locally
-		*/
-
-		var imgDataUrl = canvas.toDataURL('image/png');
-
-		var blobBin = atob(imgDataUrl.split(',')[1]); // base64 데이터 디코딩
-		var array = [];
-		for (var i = 0; i < blobBin.length; i++) {
-			array.push(blobBin.charCodeAt(i));
-		}
-		var blob = new Blob([new Uint8Array(array)], {
-			type: 'image/png'
-		}); // Blob 생성
-		var file = new File([blob], "myblob.png");
-		storedFiles.set("myimg", file);
-		console.log(storedFiles);
-
-		//document.querySelector('#sender').dispatchEvent(new Event('click'));
-	}
-
-	function reloadDetail() {
-		// img_title -> 
-		var title = document.querySelector('#imgTitle').value;
-
-		// carousel -> make
-		let nodes = Array.from(document.querySelector('.lst_thumb').children); // get array
-		for (var node of nodes) {
-			var srcUrl = node.querySelector('img').currentSrc;
-			var index = node.getAttribute('idx');
-			iframeContentWindow.makeProductImageCarousel(srcUrl, title, index);
-		}
-
-		// product_content ->
-		document.querySelector('#productContent').dispatchEvent(new Event('input'));
-		document.querySelector('#eventContent').dispatchEvent(new Event('input'));
-
-		if (spoint != null) {
-			iframeContentWindow.map.setCenter(spoint);
-		}
-	}
-
-	var uniqueIdx = -1;
-
-	function initThumbNailChangeListener() {
-		console.log("--initThumbNail here!", iframeDoc);
-		document.querySelector('#reviewImageFileOpenInput').addEventListener('change',
-			function (evt) {
-				const image = evt.target.files[0];
-
-				if (image) {
-					var productImageName = window.URL.createObjectURL(image);
-
-					storedFiles.set(productImageName, image);
-
-					var template = document.querySelector('#titleImageHandleBar').innerHTML;
-					var bindTemplate = Handlebars.compile(template);
-					var innerHtml = "";
-
-					let nodes = Array.from(document.querySelector('.lst_thumb').children);
-					let index = ++uniqueIdx;
-
-					var productImageAdapter = {
-						"imgUrl": productImageName,
-						"idx": index
-					};
-
-					innerHtml += bindTemplate(productImageAdapter);
-
-					document.querySelector('.lst_thumb').innerHTML += innerHtml;
-
-					try {
-						iframeContentWindow.makeProductImageCarousel(productImageName, document.querySelector(
-								'#imgTitle')
-							.value, index);
-					} catch (e) {
-						console.log(e);
-					}
-				} else {
-					console.log('no');
-				}
-			});
-	}
-
-	function initDeleteImgListener() {
-		document.querySelector('.lst_thumb').addEventListener('click',
-			function (evt) {
-				//var imgWrap = evt.target.parentElement; // (div) span
-				// (ul) li div span -> (li) div span
-				//imgWrap.parentElement.parentElement.removeChild(imgWrap.parentElement);
-
-				var li = evt.target.closest('li');
-
-				var imgUrl = li.querySelector('img').src;
-				storedFiles.delete(imgUrl);
-
-				let idx = li.getAttribute('idx');
-				let ul = li.parentElement;
-				ul.removeChild(li);
-
-				iframeContentWindow.removeProductImage(idx);
-
-				//let nodes = ul.querySelectorAll('li img'); // li > img 바로뒤
-				//console.log(nodes[nodes.length-1].src);
-
-			});
-	}
-
-	function edValueKeyPress(target) {
-		var id = target.id;
-
-		if (id === "productContent") {
-			var ele = iframeDoc.querySelector('.main .store_details .dsc');
-			if (ele != null) {
-				productInfo.content = target.value;
-				ele.innerHTML = target.value;
-				ele.scrollIntoView({
-					behavior: "smooth",
-					block: "center",
-					inline: "center"
-				});
-			}
-		} else if (id === "eventContent") {
-			var ele = iframeDoc.querySelector('.in_dsc');
-			if (ele != null) {
-				productInfo.event = target.value;
-				ele.innerText = target.value;
-			}
-		} else if (id === "imgTitle") {
-			var ele = iframeDoc.querySelectorAll('.visual_txt_tit > span');
-			if (ele != null) {
-				productInfo.description = target.value;
-				for (var el of ele) {
-					el.textContent = target.value;
-				}
-			}
-		}
+	function addList() {
+		// 2. 추가할 li element 생성
+		// 2-1. 추가할 li element 생성
+		const li = document.createElement("li");
+		var target = document.getElementById('priceTypeName');
+
+		const priceTypeNode = document.createElement('input');
+		priceTypeNode.setAttribute('hidden', 'true');
+		priceTypeNode.setAttribute('value', target.value);
+
+		// 1. 추가할 값을 input창에서 읽어온다
+		const priceTypeNameNode = document.createElement('input');
+		const priceTypeName = target.options[target.selectedIndex].text;
+		priceTypeNameNode.setAttribute('readonly', 'true');
+		priceTypeNameNode.setAttribute('value', priceTypeName);
+
+		// 2-2. li에 id 속성 추가 
+		//li.setAttribute('id', addValue);
+
+		// 2-3. li에 text node 추가 
+		const priceNode = document.createElement('input')
+		const price = document.getElementById('price').value;
+		priceNode.setAttribute('type', 'text');
+		priceNode.setAttribute('value', price);
+		priceNode.setAttribute('id', 'priceNode');
+
+		const discountRateNode = document.createElement('input')
+		const discountRate = document.getElementById('discountRate').value;
+		discountRateNode.setAttribute('type', 'text');
+		discountRateNode.setAttribute('value', discountRate);
+
+		li.appendChild(priceTypeNode);
+		li.appendChild(priceTypeNameNode);
+		li.appendChild(priceNode);
+		li.appendChild(discountRateNode);
+
+		// 3. 생성된 li를 ul에 추가
+		document.getElementById('prices').appendChild(li);
 	}
 </script>
 

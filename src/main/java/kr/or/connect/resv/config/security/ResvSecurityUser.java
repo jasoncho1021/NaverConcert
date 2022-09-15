@@ -14,7 +14,7 @@ import kr.or.connect.resv.domain.MemberRole;
 public class ResvSecurityUser extends User {
 
 	private static final String ROLE_PREFIX = "ROLE_";
-	
+
 	private Member member;
 
 	public ResvSecurityUser(Member member) {

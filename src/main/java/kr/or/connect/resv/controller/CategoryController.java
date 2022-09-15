@@ -12,7 +12,7 @@ import kr.or.connect.resv.exception.UnAuthenticationException;
 import kr.or.connect.resv.service.CategoryService;
 
 @RestController
-@RequestMapping(path="/api/categories")
+@RequestMapping(path = "/api/categories")
 public class CategoryController {
 	@Autowired
 	private CategoryService categoryService;
@@ -21,18 +21,18 @@ public class CategoryController {
 	public CategoryDTO getCategories() {
 		return categoryService.getCategories();
 	}
-	
+
 	@GetMapping("/error")
 	public ResponseEntity<CategoryDTO> getCategorieError() throws Exception {
-		
-		if(true) {
+
+		if (true) {
 			throw new UnAuthenticationException();
 		} else {
 			//throw new IllegalStateException("Basic Error");
 		}
 
 		//throw new IllegalStateException("Basic Error");
-		
+
 		return new ResponseEntity<>(new CategoryDTO(), HttpStatus.SERVICE_UNAVAILABLE);
 	}
 }

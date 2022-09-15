@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 import kr.or.connect.resv.dto.model.ImageInfo;
 import kr.or.connect.resv.util.Util;
 
-@Repository
+@Repository("ImageDaoReader")
 public class ImageDao {
 	private NamedParameterJdbcTemplate jdbc;
 	private RowMapper<ImageInfo> imageInfoRowMapper = BeanPropertyRowMapper.newInstance(ImageInfo.class);

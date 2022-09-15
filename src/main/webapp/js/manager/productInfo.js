@@ -1,23 +1,18 @@
-var productInfo = {
-    // detail
-    categoryId: 0,
-    description: '',
-    content: '',
-    event: '',
-    imageType: '',
-    productImages: [],
-    mapImage: '',
+var mapImage;
 
-    // reservation
-    openingHours: '',
-    placeName: '',
-    placeLot: '',
-    placeStreet: '',
-    tel: '',
-    hompage: '',
-    email: '',
+var inputProductDto = {
+	description : '',
+	content : '',
+	event : '',
+	categoryId : ''
+}
 
-    priceTypeName: '',
-    price: 0,
-    discountRate: 0.0
+var inputDisplayInfoDto = {
+	openingHours : '',
+	placeName : '',
+	placeLot : '',
+	placeStreet : '',
+	tel : '',
+	homepage : '',
+	email : ''
 }

@@ -15,17 +15,19 @@
         .container_visual {
             height: 414px;
         }
-        
+
         .messages {
-  overflow: auto;
-  /* use overscroll-behavior-y to stop page scrolling behind the chatbox,
+            overflow: auto;
+            /* use overscroll-behavior-y to stop page scrolling behind the chatbox,
   when the chatbox's scroll limits are reached */
-  overscroll-behavior-y: contain;
-}
+            overscroll-behavior-y: contain;
+        }
     </style>
+    <!-- 
     <script id="nmap" type="text/javascript"
         src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=688kianals&submodules=geocoder">
     </script>
+    -->
 </head>
 
 <body>
@@ -240,20 +242,13 @@
                         <div class="box_store_info no_topline">
                             <a class="store_location" title="지도웹으로 연결">
 
-                                <!--
-                                <img class="store_map img_thumb" alt="map"
-                                    src="https://simg.pstatic.net/static.map/image?version=1.1&amp;crs=EPSG:4326&amp;baselayer=bl_vc_bg&amp;exception=xml&amp;scale=2&amp;caller=mw_smart_booking&amp;overlayers=ol_vc_an&amp;center=127.0011948,37.5717079&amp;markers=type,default2,127.0011948,37.5717079&amp;level=11&amp;w=340&amp;h=150">
-                                -->
 
                                 <!--
                                 <img class="store_map img_thumb" alt="map" id="smap" crossorigin="anonymous"
                                     src="https://naveropenapi.apigw.ntruss.com/map-static/v2/raster-cors?w=300&h=300&center=127.084338,37.5061&level=16&X-NCP-APIGW-API-KEY-ID=688kianals">
-                                    -->
+                                -->
 
-                                <div id="map" class="store_map img_thumb" alt="map" style="width:340px;height:340px;">
-                                </div>
-
-                                <!-- <img class="store_map img_thumb" alt="map" src="http://images.freeimages.com/images/premium/previews/2282/2282459-fisheye-tank.jpg"> -->
+                                <img class="store_map img_thumb" alt="map" id="smap" src="">
 
 
                                 <!-- <span class="img_border"></span> -->
@@ -323,22 +318,24 @@
 </body>
 
 <script>
-    loadScript();
+    /*
+        loadScript();
 
-    function loadScript() {
-        console.log("load nmap");
-        map = new naver.maps.Map("map", {
-            center: new naver.maps.LatLng(37.3595316, 127.1052133),
-            zoom: 15,
-            mapTypeControl: true
-        });
+        function loadScript() {
+            console.log("load nmap");
+            map = new naver.maps.Map("map", {
+                center: new naver.maps.LatLng(37.3595316, 127.1052133),
+                zoom: 15,
+                mapTypeControl: true
+            });
 
-        map.setCursor('pointer');
+            map.setCursor('pointer');
 
-        // naver.maps.onJSContentLoaded = initGeocoder;
-    }
+            // naver.maps.onJSContentLoaded = initGeocoder;
+        }
 
-    var map;
+        var map;
+        */
 </script>
 
 
