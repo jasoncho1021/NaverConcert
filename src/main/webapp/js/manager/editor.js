@@ -3,11 +3,15 @@ var iframeDoc;
 
 var storedFiles = new Map(); //store the object of the all files
 
-document.addEventListener("DOMContentLoaded", function () {
-    console.log("DOM ContentLoaded");
+document.addEventListener("DOMContentLoaded", function (evt) {
+    console.log("DOM ContentLoaded", evt);
 
     var iframe = document.getElementById("outputiframe");
-    iframe.contentWindow.addEventListener("DOMContentLoaded", onFrameDOMContentLoaded, false);
+    iframeContentWindow = iframe.contentWindow;
+    iframeDoc = iframeContentWindow.document;
+
+    onFrameDOMContentLoaded();
+
     iframe.addEventListener("load", siteLoaded, false);
 });
 
@@ -25,14 +29,17 @@ function onFrameDOMContentLoaded() {
 
 function siteLoaded(evt) {
     console.log("iframe content loaded");
-    var url = evt.currentTarget.contentWindow.location.pathname;
-
+    if (evt == null) {
+        return;
+    }
     iframeContentWindow = document.getElementById('outputiframe').contentWindow;
     iframeDoc = iframeContentWindow.document;
+    var url = evt.currentTarget.contentWindow.location.pathname;
 
-    if (url.includes('detail')) {
+    console.log(url);
+    if (url.includes('uploadDetail')) {
         reloadDetail();
-    } else if (url.includes('reserve')) {
+    } else if (url.includes('uploadReserve')) {
 
     }
 }
@@ -116,9 +123,11 @@ function reloadDetail() {
     document.querySelector('#content').dispatchEvent(new Event('input'));
     document.querySelector('#event').dispatchEvent(new Event('input'));
 
+    /*
     if (spoint != null) {
         iframeContentWindow.map.setCenter(spoint);
     }
+    */
 }
 
 var uniqueIdx = 0; // 0 == th, 1 <= ma
@@ -221,7 +230,9 @@ function edValueKeyPress(target) {
     var id = target.id;
 
     if (id === "content") {
+        console.log('content!');
         var ele = iframeDoc.querySelector('.main .store_details .dsc');
+        console.log(ele, target.value);
         if (ele != null) {
             ele.innerHTML = target.value;
             ele.scrollIntoView({
