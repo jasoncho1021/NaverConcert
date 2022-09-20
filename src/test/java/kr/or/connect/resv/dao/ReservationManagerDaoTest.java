@@ -28,7 +28,7 @@ public class ReservationManagerDaoTest {
 
 	@Autowired
 	private ReservationManagerDao dao;
-	
+
 	@Autowired
 	private ReservationDao rDao;
 
@@ -39,11 +39,13 @@ public class ReservationManagerDaoTest {
 	public void insertReservationParamGetReservationResponse() {
 		// given
 		ReservationParam param = new ReservationParam();
+
 		List<ReservationPrice> prices = new ArrayList<ReservationPrice>();
 
 		ReservationPrice priceA = new ReservationPrice();
 		priceA.setCount(2);
 		priceA.setProductPriceId(1);
+
 		ReservationPrice priceB = new ReservationPrice();
 		priceB.setCount(3);
 		priceB.setProductPriceId(3);
@@ -62,11 +64,16 @@ public class ReservationManagerDaoTest {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 		param.setReservationYearMonthDay(LocalDateTime.parse(dateTime, formatter));
 		System.out.println(LocalDateTime.parse(dateTime, formatter));
+
 		// when
 		int reservationInfoId = rDao.insertReservationInfo(param);
+		System.out.println(reservationInfoId);
+
+		//reservationInfoId = 22;
 
 		for (ReservationPrice reservationPrice : param.getPrices()) {
 			reservationPrice.setReservationInfoId(reservationInfoId);
+
 			int reservationInfoPriceId = rDao.insertReservationInfoPrice(reservationPrice);
 			reservationPrice.setReservationInfoPriceId(reservationInfoPriceId);
 		}
@@ -78,15 +85,17 @@ public class ReservationManagerDaoTest {
 		// then
 		// assertThat(param, is(16));
 		System.out.println(reservationResponse);
-		reservationInfoByEmail(param.getReservationEmail());
+		ReservationInfoResponse reservationInfoResponse = reservationInfoByEmail(param.getReservationEmail());
+		System.out.println(reservationInfoResponse);
 	}
 
-	public void reservationInfoByEmail(String reservationEmail) {
+	public ReservationInfoResponse reservationInfoByEmail(String reservationEmail) {
 		ReservationInfoResponse reservationInfoResponse = new ReservationInfoResponse();
 		List<ReservationInfo> reservations = rDao.selectReservationInfoByReservationEmail(reservationEmail);
 
 		for (ReservationInfo reservationInfo : reservations) {
 			DisplayInfo displayInfo = rDao.selectDisplayInfoByDisplayInfoId(reservationInfo.getDisplayInfoId());
+
 			int totalPrice = rDao.selectTotalPriceByReservationInfoId(reservationInfo.getReservationInfoId());
 			reservationInfo.setDisplayInfo(displayInfo);
 			reservationInfo.setTotalPrice(totalPrice);
@@ -94,6 +103,8 @@ public class ReservationManagerDaoTest {
 
 		reservationInfoResponse.setReservations(reservations);
 		reservationInfoResponse.setSize(reservations.size());
+
+		return reservationInfoResponse;
 	}
 
 }

@@ -29,7 +29,7 @@ public class ProductImage {
 		this.createDate = createDate;
 	}
 
-	public boolean isDeleteFlag() {
+	public boolean getDeleteFlag() {
 		return deleteFlag;
 	}
 
