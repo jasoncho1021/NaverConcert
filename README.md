@@ -1,6 +1,10 @@
 # 공연 예매 웹 애플리케이션
 
+* 조회
 ![concerto](https://user-images.githubusercontent.com/12610035/191224556-24396510-3bab-4746-9015-e51874b33fec.gif)
+
+* 예매, 로그인, 취소
+![concerto2](https://user-images.githubusercontent.com/12610035/191225697-b194c1be-1f0a-4046-8e84-63618906401a.gif)
 
 ## 요구사항 및 구조
 https://docs.google.com/presentation/d/1i2IC1yIH5ACFCvCH4EMVv_3Zw2oltRvHK94amyNEKbs/edit#slide=id.p22
