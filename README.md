@@ -1,7 +1,6 @@
 # 공연 예매 웹 애플리케이션
 
-![concert](https://user-images.githubusercontent.com/12610035/191217014-3c0e3ae9-bf48-4864-a138-03779707b0ad.gif)
-
+![concerto](https://user-images.githubusercontent.com/12610035/191224556-24396510-3bab-4746-9015-e51874b33fec.gif)
 
 ## 요구사항 및 구조
 https://docs.google.com/presentation/d/1i2IC1yIH5ACFCvCH4EMVv_3Zw2oltRvHK94amyNEKbs/edit#slide=id.p22
