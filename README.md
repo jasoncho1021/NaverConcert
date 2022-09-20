@@ -25,7 +25,9 @@ https://github.com/jasoncho1021/NaverConcert/wiki
 http://49.236.147.192:9090/swagger-ui.html#/
 
 ## ERD
-![image](https://user-images.githubusercontent.com/12610035/103641702-7d8c4c00-4f95-11eb-9247-00b9ec5e6e39.png)
+![rsvmodel](https://user-images.githubusercontent.com/12610035/191214350-b8580484-3ce9-4726-a210-dc61df648d6e.png)
+41-808f6480d822.png)
+
 
 ## [추가] 업로드기능 구현화면
 * iframe을 사용하여 기존 서비스 UI 미리보기 가능
