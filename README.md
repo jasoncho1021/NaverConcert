@@ -26,3 +26,11 @@ http://49.236.147.192:9090/swagger-ui.html#/
 
 ## ERD
 ![image](https://user-images.githubusercontent.com/12610035/103641702-7d8c4c00-4f95-11eb-9247-00b9ec5e6e39.png)
+
+## [추가] 업로드기능 구현화면
+* iframe을 사용하여 기존 서비스 UI 미리보기 가능
+* 사진 여러장 업로드시 캐러셀 동작
+* Naver 지도 연동하여 지도 표시 및 지번주소, 도로명 주소 검색  
+  
+![Screenshot from 2022-09-20 17-34-30](https://user-images.githubusercontent.com/12610035/191210034-542241e9-6aca-4463-91bd-df01b2f2212e.png)
+![Screenshot from 2022-09-20 17-35-56](https://user-images.githubusercontent.com/12610035/191210044-d147d731-f0b9-42f1-a5d8-df6a6c8a2510.png)
