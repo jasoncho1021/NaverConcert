@@ -5,7 +5,12 @@ https://docs.google.com/presentation/d/1i2IC1yIH5ACFCvCH4EMVv_3Zw2oltRvHK94amyNE
 
 * Layerd Architecture 를 적용하여 Spring 설정 파일을 Presentation Layer 와 Service, Data Access Layer 로 나눠 관리
 * CSR(Client Side Rendering) 방식 활용
-* Session 변수와 Interceptor 를 사용하여 로그인 상태 유지 및 페이지 접근 권한 검증 구현
+* Session 변수와 Interceptor 를 사용하여 로그인 상태 유지 및 페이지 접근 권한 검증 구현  
+* 정규표현 식을 사용하여 사용자 입력에 대한 검증 구현
+* formData 와 MultipartFile 을 활용한 이미지 업로드 구현
+* SpringSecurity를 이용한 인증,인가 구현
+* 테스트 코드와 AOP를 사용하여 DB에 직접 값을 넣어보며 테스트 진행
+ 
 
 ## 사용기술 
 * MySQL,innodb version : 5.7.32  
