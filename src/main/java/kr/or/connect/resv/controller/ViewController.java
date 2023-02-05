@@ -30,7 +30,7 @@ public class ViewController {
 		return "mainpage";
 	}
 
-	@GetMapping(path = "/manager")
+	@GetMapping(path = "/uploadManager")
 	public String getManagerPage() {
 		return "manager/manager";
 	}
