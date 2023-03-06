@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -60,7 +61,7 @@ public class UploadTest {
 
 		// when, then
 		try {
-			MvcResult result = mvc.perform(multipart("/manager/upload").file(productImage1).file(productImage2)
+			MvcResult result = mvc.perform(multipart("/uploadmanager/upload").file(productImage1).file(productImage2)
 					.file(productImage3).file(mapImage).param("productImages[0].imageType", "th")
 					.param("productImages[1].imageType", "ma").param("productImages[2].imageType", "ma")
 					.param("inputProductDto.description", "타이").param("inputProductDto.content", "a")

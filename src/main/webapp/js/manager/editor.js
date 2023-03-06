@@ -89,7 +89,7 @@ function initSubmit() {
         }
 
         xhr = new XMLHttpRequest();
-        xhr.open('POST', '/manager/upload', true);
+        xhr.open('POST', '/uploadmanager/upload', true);
 
         //xhr.setRequestHeader('Content-type', 'multipart/form-data');
 

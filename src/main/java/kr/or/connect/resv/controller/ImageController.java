@@ -19,48 +19,50 @@ import kr.or.connect.resv.util.Util;
 @RestController
 @RequestMapping(path = "/images")
 public class ImageController {
-	@Autowired
-	private ImageService imageService;
 
-	@GetMapping("/product/{productId}")
-	public void downloadProductImageByProductId(HttpServletResponse response, @PathVariable Integer productId) {
-		downloadImage(response, imageService.getImageByProductId(productId));
-	}
+    @Autowired
+    private ImageService imageService;
 
-	@GetMapping("/{imageId}")
-	public void downloadImageByImageId(HttpServletResponse response, @PathVariable Integer imageId) {
-		downloadImage(response, imageService.getImageByImageId(imageId));
-	}
+    @GetMapping("/product/{productId}")
+    public void downloadProductImageByProductId(HttpServletResponse response, @PathVariable Integer productId) {
+        downloadImage(response, imageService.getImageByProductId(productId));
+    }
 
-	@GetMapping("/comment/{reservationUserCommentImageId}")
-	public void downloadReservationUserCommentImageByCommentId(HttpServletResponse response, @PathVariable Integer reservationUserCommentImageId) {
-		downloadImage(response, imageService.getImageByReservationUserCommentImageId(reservationUserCommentImageId));
-	}
+    @GetMapping("/{imageId}")
+    public void downloadImageByImageId(HttpServletResponse response, @PathVariable Integer imageId) {
+        downloadImage(response, imageService.getImageByImageId(imageId));
+    }
 
-	private void downloadImage(HttpServletResponse response, ImageInfo imageInfo) {
-		String saveFileName = imageInfo.getSaveFileName();
-		String savePath = Util.IMG_ROOT_PATH + saveFileName;
-		String contentType = imageInfo.getContentType();
+    @GetMapping("/comment/{reservationUserCommentImageId}")
+    public void downloadReservationUserCommentImageByCommentId(HttpServletResponse response,
+            @PathVariable Integer reservationUserCommentImageId) {
+        downloadImage(response, imageService.getImageByReservationUserCommentImageId(reservationUserCommentImageId));
+    }
 
-		File file = new File(savePath);
-		int fileLength = (int) file.length();
+    private void downloadImage(HttpServletResponse response, ImageInfo imageInfo) {
+        String saveFileName = imageInfo.getSaveFileName();
+        String savePath = Util.IMG_ROOT_PATH + saveFileName;
+        String contentType = imageInfo.getContentType();
 
-		response.setHeader("Content-Disposition", "attachment; filename=\"" + saveFileName + "\";");
-		response.setHeader("Content-Transfer-Encoding", "binary");
-		response.setHeader("Content-Type", contentType);
-		response.setHeader("Content-Length", "" + fileLength);
-		response.setHeader("Pragma", "no-cache;");
-		response.setHeader("Expires", "-1;");
+        File file = new File(savePath);
+        int fileLength = (int) file.length();
 
-		try (FileInputStream fis = new FileInputStream(file); 
-			OutputStream out = response.getOutputStream();) {
-			int readCount = 0;
-			byte[] buffer = new byte[1024];
-			while ((readCount = fis.read(buffer)) != -1) {
-				out.write(buffer, 0, readCount);
-			}
-		} catch (Exception ex) {
-			return;
-		}
-	}
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + saveFileName + "\";");
+        response.setHeader("Content-Transfer-Encoding", "binary");
+        response.setHeader("Content-Type", contentType);
+        response.setHeader("Content-Length", "" + fileLength);
+        response.setHeader("Pragma", "no-cache;");
+        response.setHeader("Expires", "-1;");
+
+        try (FileInputStream fis = new FileInputStream(file);
+                OutputStream out = response.getOutputStream();) {
+            int readCount = 0;
+            byte[] buffer = new byte[1024];
+            while ((readCount = fis.read(buffer)) != -1) {
+                out.write(buffer, 0, readCount);
+            }
+        } catch (Exception ex) {
+            return;
+        }
+    }
 }

@@ -18,6 +18,8 @@ import org.springframework.web.servlet.config.annotation.DefaultServletHandlerCo
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
@@ -34,13 +36,10 @@ import kr.or.connect.resv.interceptor.SignInInterceptor;
 @EnableWebMvc
 @ComponentScan(basePackages = { "kr.or.connect.resv.controller", "kr.or.connect.resv.interceptor",
 		"kr.or.connect.resv.exception", "kr.or.connect.resv.manager.controller" })
-public class WebMvcContextConfiguration extends WebMvcConfigurerAdapter{
+public class WebMvcContextConfiguration extends WebMvcConfigurationSupport {
 
 	@Autowired
 	private AuthenticationInterceptor authenticationInterceptor;
-
-	//@Autowired
-	//private EmailInterceptor emailInterceptor;
 
 	@Autowired
 	private LogInterceptor logInterceptor;
