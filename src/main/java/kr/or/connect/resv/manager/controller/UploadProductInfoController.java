@@ -16,7 +16,7 @@ import kr.or.connect.resv.manager.service.UploadService;
 import kr.or.connect.resv.util.Util;
 
 @RestController
-@RequestMapping(path = "/manager")
+@RequestMapping(path = "/uploadmanager")
 public class UploadProductInfoController {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());

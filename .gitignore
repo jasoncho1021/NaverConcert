@@ -1,2 +1,11 @@
-/src/main/resources/application.properties target .classpath .project .settings
-/target/
+**/application.properties
+target
+.classpath
+.project
+.settings
+target/
+.idea
+*.iws
+*.iml
+*.ipr
+out/

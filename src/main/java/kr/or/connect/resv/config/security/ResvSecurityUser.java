@@ -28,7 +28,6 @@ public class ResvSecurityUser extends User {
 
 	private static List<GrantedAuthority> makeGrantedAuthority(List<MemberRole> roles) {
 		List<GrantedAuthority> list = new ArrayList<>();
-
 		roles.forEach(role -> list.add(new SimpleGrantedAuthority(ROLE_PREFIX + role.getRoleName())));
 		return list;
 	}

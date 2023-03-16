@@ -1,5 +1,7 @@
 package kr.or.connect.resv.config;
 
+import kr.or.connect.resv.config.security.ResvUserService;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -8,9 +10,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import kr.or.connect.resv.config.security.ResvUserService;
-import lombok.extern.java.Log;
 
 @Log
 @EnableWebSecurity
@@ -25,8 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 		http.csrf().disable();
 
-		http.authorizeRequests().antMatchers("/manager/**").hasRole("MANAGER").and().formLogin();
-
+		http.authorizeRequests().antMatchers("/uploadmanager/**").hasRole("MANAGER").and().formLogin();
 		http.userDetailsService(resvUserService);
 
 		http.headers().frameOptions().sameOrigin();

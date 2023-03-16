@@ -18,6 +18,8 @@ import org.springframework.web.servlet.config.annotation.DefaultServletHandlerCo
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
@@ -31,16 +33,14 @@ import kr.or.connect.resv.interceptor.LogInterceptor;
 import kr.or.connect.resv.interceptor.SignInInterceptor;
 
 @Configuration
-@EnableWebMvc
+//@EnableWebMvc
 @ComponentScan(basePackages = { "kr.or.connect.resv.controller", "kr.or.connect.resv.interceptor",
 		"kr.or.connect.resv.exception", "kr.or.connect.resv.manager.controller" })
-public class WebMvcContextConfiguration extends WebMvcConfigurerAdapter{
+public class WebMvcContextConfiguration extends WebMvcConfigurationSupport {
+//public class WebMvcContextConfiguration implements WebMvcConfigurer {
 
 	@Autowired
 	private AuthenticationInterceptor authenticationInterceptor;
-
-	//@Autowired
-	//private EmailInterceptor emailInterceptor;
 
 	@Autowired
 	private LogInterceptor logInterceptor;
@@ -60,6 +60,7 @@ public class WebMvcContextConfiguration extends WebMvcConfigurerAdapter{
 		registry.addResourceHandler("/css/**").addResourceLocations("/css/").setCachePeriod(31556926);
 		registry.addResourceHandler("/img/**").addResourceLocations("/img/").setCachePeriod(21556926);
 		registry.addResourceHandler("/js/**").addResourceLocations("/js/").setCachePeriod(31556926);
+		registry.addResourceHandler("/font/**").addResourceLocations("/font/").setCachePeriod(31556926);
 	}
 
 	@Bean
@@ -77,8 +78,10 @@ public class WebMvcContextConfiguration extends WebMvcConfigurerAdapter{
 
 	@Override
 	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-		super.configureMessageConverters(converters);
+		//super.configureMessageConverters(converters);
+		//super.addDefaultHttpMessageConverters(converters);
 		converters.add(new MappingJackson2HttpMessageConverter(jackson2ObjectMapperBuilder().build()));
+		super.addDefaultHttpMessageConverters(converters);
 	}
 
 	@Bean
