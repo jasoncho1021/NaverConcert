@@ -33,10 +33,11 @@ import kr.or.connect.resv.interceptor.LogInterceptor;
 import kr.or.connect.resv.interceptor.SignInInterceptor;
 
 @Configuration
-@EnableWebMvc
+//@EnableWebMvc
 @ComponentScan(basePackages = { "kr.or.connect.resv.controller", "kr.or.connect.resv.interceptor",
 		"kr.or.connect.resv.exception", "kr.or.connect.resv.manager.controller" })
 public class WebMvcContextConfiguration extends WebMvcConfigurationSupport {
+//public class WebMvcContextConfiguration implements WebMvcConfigurer {
 
 	@Autowired
 	private AuthenticationInterceptor authenticationInterceptor;
@@ -59,6 +60,7 @@ public class WebMvcContextConfiguration extends WebMvcConfigurationSupport {
 		registry.addResourceHandler("/css/**").addResourceLocations("/css/").setCachePeriod(31556926);
 		registry.addResourceHandler("/img/**").addResourceLocations("/img/").setCachePeriod(21556926);
 		registry.addResourceHandler("/js/**").addResourceLocations("/js/").setCachePeriod(31556926);
+		registry.addResourceHandler("/font/**").addResourceLocations("/font/").setCachePeriod(31556926);
 	}
 
 	@Bean
@@ -76,8 +78,10 @@ public class WebMvcContextConfiguration extends WebMvcConfigurationSupport {
 
 	@Override
 	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-		super.configureMessageConverters(converters);
+		//super.configureMessageConverters(converters);
+		//super.addDefaultHttpMessageConverters(converters);
 		converters.add(new MappingJackson2HttpMessageConverter(jackson2ObjectMapperBuilder().build()));
+		super.addDefaultHttpMessageConverters(converters);
 	}
 
 	@Bean
