@@ -47,7 +47,7 @@ public class ReservationController {
 	@GetMapping(params = "reservationEmail")
 	public ReservationInfoResponse getReservations(
 			@RequestParam(value = "reservationEmail", required = true) String reservationEmail) {
-		ReservationInfoResponse reservationInfoResponse = reservationService.getReservations(reservationEmail);
+		ReservationInfoResponse reservationInfoResponse = reservationService.getNestedReservations(reservationEmail);
 		return reservationInfoResponse;
 	}
 

@@ -2,7 +2,11 @@ package kr.or.connect.resv.dto;
 
 import java.util.List;
 import kr.or.connect.resv.dto.model.ReservationInfo;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
+@EqualsAndHashCode
+@ToString
 public class ReservationInfoResponse {
 
 	private List<ReservationInfo> reservations;
@@ -22,11 +26,6 @@ public class ReservationInfoResponse {
 
 	public void setSize(int size) {
 		this.size = size;
-	}
-
-	@Override
-	public String toString() {
-		return "ReservationInfoResponse [reservations=" + reservations + ", size=" + size + "]";
 	}
 
 }

@@ -7,10 +7,10 @@ import kr.or.connect.resv.dto.model.ReservationParam;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface ReservationService {
-	public ReservationInfoResponse getReservations(String reservationEmail);
-	public Integer makeReservation(ReservationParam reservationParam);
-	public ReservationResponse cancelReservation(Integer reservationId);
-	public ReservationResponse makeReservationResponse(Integer reservationInfoId);
-	public Integer makeReservationComment(CommentResponse requestParams, MultipartFile attachedImage);
-	public CommentResponse getCommentResponse(Integer reservationUserCommentId);
+	ReservationInfoResponse getNestedReservations(String reservationEmail);
+	Integer makeReservation(ReservationParam reservationParam);
+	ReservationResponse cancelReservation(Integer reservationId);
+	ReservationResponse makeReservationResponse(Integer reservationInfoId);
+	Integer makeReservationComment(CommentResponse requestParams, MultipartFile attachedImage);
+	CommentResponse getCommentResponse(Integer reservationUserCommentId);
 }

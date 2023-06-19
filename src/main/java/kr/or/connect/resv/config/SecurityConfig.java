@@ -6,15 +6,15 @@ import kr.or.connect.resv.security.ResvUserService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Log
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true)
+//@EnableGlobalMethodSecurity(securedEnabled = true)
 public class SecurityConfig {
 
     @Autowired
@@ -32,7 +32,11 @@ public class SecurityConfig {
         http.authorizeRequests().antMatchers("/uploadmanager/**").hasRole("MANAGER");
 
         http.formLogin().loginPage("/login").successHandler(new LoginSuccessHandler());
+
         //http.exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint());
+
+        http.exceptionHandling().accessDeniedPage("/accessDenied");
+
         http.logout().invalidateHttpSession(true);
 
         http.userDetailsService(resvUserService);
@@ -43,7 +47,8 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new PasswordEncoder() {
+        return new BCryptPasswordEncoder();
+ /*       return new PasswordEncoder() {
 
             @Override
             public String encode(CharSequence rawPassword) {
@@ -55,7 +60,7 @@ public class SecurityConfig {
                 return rawPassword.equals(encodedPassword);
             }
 
-        };
+        };*/
     }
 
 }

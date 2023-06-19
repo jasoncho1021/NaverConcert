@@ -34,6 +34,7 @@
     <div id="container">
         <div class="header fade">
             <header class="header_tit">
+                <!--
                 <h1 class="logo">
                     <a href="./mainpage.html" class="lnk_logo" title="네이버"> <span class="spr_bi ico_n_logo">네이버</span>
                     </a>
@@ -41,6 +42,7 @@
                     </a>
                 </h1>
                 <a href="#" class="btn_my"> <span title="예약확인">예약확인</span> </a>
+                -->
             </header>
         </div>
         <div class="ct main">

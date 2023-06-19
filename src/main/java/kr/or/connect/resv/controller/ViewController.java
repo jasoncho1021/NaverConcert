@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class ViewController {
@@ -81,7 +82,7 @@ public class ViewController {
     public String login(@RequestParam(name = Keywords.AUTHENTICATION_KEY, required = true) String reservationEmail,
             HttpSession session, ModelMap model) {
 
-        ReservationInfoResponse reservationInfoResponse = reservationService.getReservations(reservationEmail);
+        ReservationInfoResponse reservationInfoResponse = reservationService.getNestedReservations(reservationEmail);
         if (reservationInfoResponse.getSize() > 0) {
             model.addAttribute(Keywords.USER_DATA, reservationInfoResponse);
             model.addAttribute(Keywords.AUTHENTICATION_KEY, reservationEmail);
@@ -101,8 +102,9 @@ public class ViewController {
     }
 
     @GetMapping("/accessDenied")
-    public void accessDenied() {
-
+    @ResponseBody
+    public String accessDenied() {
+        return "denied";
     }
 
 }
