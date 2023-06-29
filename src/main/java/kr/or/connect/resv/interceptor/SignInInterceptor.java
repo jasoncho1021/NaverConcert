@@ -27,6 +27,8 @@ public class SignInInterceptor implements HandlerInterceptor {
 		if (userVO != null) {
 			session.setAttribute(Keywords.AUTHENTICATION_KEY, modelMap.get(Keywords.AUTHENTICATION_KEY));
 			session.setAttribute(Keywords.USER_DATA, userVO);
+			Object dest = session.getAttribute("dest");
+			response.sendRedirect((dest != null) ? (String) dest : "/mainpage");
 		} else {
 			response.sendRedirect("bookinglogin");
 		}

@@ -1,7 +1,6 @@
 package kr.or.connect.resv.config;
 
 import javax.sql.DataSource;
-import kr.or.connect.resv.security.LoginSuccessHandler;
 import kr.or.connect.resv.security.ResvUserService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,15 +26,16 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         log.info("security config..............");
 
-        http.csrf().disable();
+        //http.csrf().disable();
 
         http.authorizeRequests().antMatchers("/uploadmanager/**").hasRole("MANAGER");
 
-        http.formLogin().loginPage("/login").successHandler(new LoginSuccessHandler());
+        http.formLogin();
+        //http.formLogin().loginPage("/login").successHandler(new LoginSuccessHandler());
 
         //http.exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint());
 
-        http.exceptionHandling().accessDeniedPage("/accessDenied");
+        //http.exceptionHandling().accessDeniedPage("/accessDenied");
 
         http.logout().invalidateHttpSession(true);
 

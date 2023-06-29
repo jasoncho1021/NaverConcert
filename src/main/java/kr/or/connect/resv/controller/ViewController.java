@@ -79,16 +79,13 @@ public class ViewController {
     }
 
     @GetMapping(path = "/userlogin")
-    public String login(@RequestParam(name = Keywords.AUTHENTICATION_KEY, required = true) String reservationEmail,
-            HttpSession session, ModelMap model) {
+    public void login(@RequestParam(name = Keywords.AUTHENTICATION_KEY, required = true) String reservationEmail, ModelMap model) {
 
         ReservationInfoResponse reservationInfoResponse = reservationService.getNestedReservations(reservationEmail);
         if (reservationInfoResponse.getSize() > 0) {
             model.addAttribute(Keywords.USER_DATA, reservationInfoResponse);
             model.addAttribute(Keywords.AUTHENTICATION_KEY, reservationEmail);
         }
-
-        return "myreservation";
     }
 
     @GetMapping("/login")
