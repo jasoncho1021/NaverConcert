@@ -38,7 +38,6 @@ http://49.236.147.192:9090/swagger-ui.html#/
 
 ## ERD
 ![rsvmodel](https://user-images.githubusercontent.com/12610035/191214350-b8580484-3ce9-4726-a210-dc61df648d6e.png)
-41-808f6480d822.png)
 
 
 ## [추가] 업로드기능 구현화면
